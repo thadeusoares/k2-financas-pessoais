@@ -1,0 +1,69 @@
+[{
+    "id": "1",
+    "description": "Faculdade",
+    "descGrupo": "Despesas Fixas",
+    "codGrupo": "fixo",
+    "subtipo": "Fixa",
+    "created": "2016-01-11 16:17:32",
+    "updated": null
+},
+{
+    "id": "2",
+    "description": "Almoço da Faculdade",
+    "descGrupo": "Despesas Fixas",
+    "codGrupo": "fixo",
+    "subtipo": "Fixa",
+    "created": "2016-01-11 16:17:32",
+    "updated": null
+},
+{
+    "id": "5",
+    "description": "Compras Mercado",
+    "descGrupo": "Despesas Variáveis",
+    "codGrupo": "variavel",
+    "subtipo": "Alimentação",
+    "created": "2016-01-11 16:17:32",
+    "updated": null
+},
+{
+    "id": "3",
+    "description": "Almoço",
+    "descGrupo": "Despesas Variáveis",
+    "codGrupo": "variavel",
+    "subtipo": "Alimentação",
+    "created": "2016-01-11 16:17:32",
+    "updated": null
+},
+{
+    "id": "4",
+    "description": "Almoço Pela manhã",
+    "codGrupo": "variavel",
+    "descGrupo": "Despesas Variáveis",
+    "subtipo": "Alimentação",
+    "created": "2016-01-11 16:17:32",
+    "updated": null
+},
+{   "id": "6",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Lazer", "description": "Restaurante", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "7",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Lazer", "description": "Cinema", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "8",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Lazer", "description": "Entretenimento", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "9",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Almoço", "description": "Almoço de domingo", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "10",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Almoço", "description": "Almoço de sábado", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "11",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Almoço", "description": "Almoço de segunda", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "12",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Lanche", "description": "Lanche na escola", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "13",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Lanche", "description": "Lanche no Giraffas", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "14",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Transporte", "description": "Uber", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "15",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Transporte", "description": "Taxi", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "16",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Transporte", "description": "Ônibus", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "17",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Dízimo", "description": "Dízimo igreja", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "18",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Doação", "description": "Doação igreja", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "19",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Doação", "description": "Doação terceiros", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "19",    "codGrupo": "variavel","descGrupo": "Despesas Variáveis", "subtipo": "Donativo", "created": "2016-01-11 16:17:32",    "updated": null },
+    
+
+{   "id": "20",    "codGrupo": "fixo","descGrupo": "Despesas Fixas", "subtipo": "Empréstimo", "description": "FCO", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "21",    "codGrupo": "fixo","descGrupo": "Despesas Fixas", "subtipo": "Empréstimo", "description": "Previ", "created": "2016-01-11 16:17:32",    "updated": null },
+{   "id": "22",    "codGrupo": "fixo","descGrupo": "Despesas Fixas", "subtipo": "Empréstimo", "description": "Cooperforte", "created": "2016-01-11 16:17:32",    "updated": null }
+
+
+
+]

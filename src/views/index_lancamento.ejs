@@ -1,0 +1,199 @@
+<% include ../partials/header %>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-info card-header-lancamento">
+            <h4 class="card-title">Lançamentos</h4>
+            <p class="card-category">A cada início de mês, informe o saldo de sua conta e cartão
+              <span class="setup-month-icon" style="display: none;"><a href="#">Configurar <i class="fa fa-cogs"></i></a></span>
+            </p>
+          </div>
+          <div class="card-body">
+            <div class="collapse show" id="setupMonth">
+            <form action="/entry" method="POST"  id="formInsert">
+              <div class="row">
+                <div class="col-md-3 form-group bmd-form-group">
+                  <label for="inputGroupSelect04" class="bmd-label-static" style="margin-left: 15px">Escolha um mês</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+                    </div>
+                    <select class="form-control" id="inputGroupSelect04">
+                      <option selected>Setembro/2018</option>
+                      <option value="1">Agosto/2018</option>
+                      <option value="2">Julho/2018</option>
+                      <option value="3">Junho/2018</option>
+                    </select>                      
+                  </div>
+                </div>
+                <div class="col-md-3 form-group">
+                  <label for="txtSaldoInicio">Saldo no início do mês</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-money"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control money" id="txtSaldoInicio" placeholder="#0,00">
+                  </div>
+                </div>
+                <div class="col-md-4 form-group">
+                  <label for="txtSaldoCartaoInicio">Saldo cartão no início do mês</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-money"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control money" id="txtSaldoCartaoInicio" placeholder="#0,00">
+                  </div>
+                </div>  
+                <div class="form-group col-md-2">
+                  <a class="btn btn-success" style="color: white" data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth">Salvar</a>
+                </div>
+              </div>
+            </form>
+            </div>
+          </div>
+          <hr>
+          <!-- <div class="card-body table-responsive">
+            <div class="collapse show" id="collapseExample">
+              <div class="form-group">
+                <label for="inputGroupSelect04">Escolha um mês</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                  <select class="form-control" id="inputGroupSelect04">
+                    <option selected>Setembro/2018</option>
+                    <option value="1">Agosto/2018</option>
+                    <option value="2">Julho/2018</option>
+                    <option value="3">Junho/2018</option>
+                  </select>                      
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="txtSaldoInicio">Saldo no início do mês</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-money"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control money" id="txtSaldoInicio" placeholder="#0,00">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="txtSaldoCartaoInicio">Saldo cartão no início do mês</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-money"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control money" id="txtSaldoCartaoInicio" placeholder="#0,00">
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-success btn-mb col-sm-12 col-form-label" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">INCLUIR</button> 
+          </div>   -->
+        </div>
+      </div>
+    </div>
+    <div class="container alert">
+    <div class="row">
+      <div class="col-md-5 col-sm-6">
+        <div class="row">
+          <div class="col-lg-4 mb-3">
+                <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+                  <label class="btn btn-outline-success btnApontamento">
+                    <i class="material-icons">attach_money</i>
+                    <input type="radio" name="tipoLancamento" id="option1" value="1" autocomplete="off" checked>
+                  </label>
+                  <label class="btn btn-secondary btn-outline-danger active btnApontamento">
+                    <i class="material-icons">compare_arrows</i>
+                    <input type="radio" name="tipoLancamento" id="option2" value="-1" autocomplete="off">
+                  </label>
+                </div>
+          </div>
+          <div class="col-lg-8 mb-3">
+            <label class="sr-only" for="txtDescricao">Insira aqui a descrição</label>
+            <div class="input-group input-group-sm">
+              <input type='text'
+               placeholder='Insira aqui a descrição'
+               class='form-control input-very-small-k2'
+               data-url='/javascripts/despesas.json'
+               data-search-in='["descricao","descGrupo","subtipo"]'
+               data-visible-properties='["descricao", "descGrupo", "subtipo"]'
+               data-group-by='descGrupo'
+               data-selection-required='true'
+               data-focus-first-result='true'
+               data-min-length='1'
+               data-value-property='*'
+               data-text-property='{descricao}, {subtipo}, {descGrupo}'
+               data-search-contain='true'
+               id='txtDescricao'
+               name='txtDescricao'>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIM PRIMEIRO GRUPO -->
+      <!-- SEGUNDO GRUPO -->
+      <div class="col-md-4 col-sm-6">
+        <div class="row no-gutters">
+          <div class="col-lg-6 mb-3">
+            <div class="input-group">
+              <select name="tipoApontamento" class="form-control" id="tipoApontamento">
+                <optgroup label="Pessoa Física">
+                  <option value="pf01">Débito</option>
+                  <option value="pf02">Dinheiro</option>
+                  <option value="pf03">Crédito</option>
+                </optgroup>
+                <optgroup label="Pessoa Jurídica">
+                  <option value="pj01">Débito</option>
+                  <option value="pj02">Dinheiro</option>
+                  <option value="pj03">Crédito</option>
+                  <option value="pj04">Financiamento</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6 mb-3">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">R$</span>
+                </div>
+                <label class="sr-only" for="inlineFormInputGroup2">Insira aqui o valores</label>
+                <input type="text" name="valorApontamento" class="form-control money"  id="inlineFormInputGroup2" placeholder="#0,00">
+              </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIM SEGUNDO -->
+      <!-- TERCEIRO GRUPO -->
+      <div class="col-md-3 col-sm-6">
+        <div class="row no-gutters justify-content-center">
+            <div class="col-md-10 mb-3">
+              <label class="sr-only" for="inlineDatepicker">Escolha uma data</label>
+              <div class="input-group ">
+                <input autocomplete="off" type="text" name="dataApontamento" class="form-control form-control-sm datepicker" id="inlineDatepicker" placeholder="Data">
+              </div>
+            </div>
+            <div class="col-md-2 mb-3">
+              <button class="btn btn-success btn-sm  btn-block"><i class="fa fa-plus-square"></i></button>
+            </div>
+        </div>
+      </div>
+      <!-- FIM TERCEIRO -->
+    </div>
+    </div>
+  </div>
+</div>
+<% include ../partials/footer %>      
