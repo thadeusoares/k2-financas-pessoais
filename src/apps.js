@@ -4,7 +4,8 @@ var express = require('express')
 router.use('/', require('./routes/index'));
 router.use('/dashboard', require('./routes/dashboard'));
 router.use('/entry', require('./routes/entry'));
-router.use('/entry/month-config', require('./routes/month-config'));
+router.use('/goal', require('./routes/goal'));
+router.use('/goal/month-config', require('./routes/month-config'));
 router.use('/subgroup', require('./routes/subgroup'));
 router.use('/user', require('./routes/user'));
 

@@ -61,7 +61,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 
 		        	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
 				    .exec(function(err, entriesList){
-				        res.render("entries/index",{monthConfig: monthConfig, anotherMonths: anotherMonths, entries: entriesList});
+				        res.render("entries",{monthConfig: monthConfig, anotherMonths: anotherMonths, entries: entriesList});
 				    });
 				});
        		}

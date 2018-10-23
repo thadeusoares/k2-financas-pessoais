@@ -59,6 +59,13 @@ a.linkGroup:focus, a.linkGroup:hover {
   font-weight: bold !important;
 }
 
+#subgroupsGoals {
+  position: relative;
+  height: 400px;
+  margin-top: .5rem;
+  overflow-y: scroll;
+}
+
 /* CUSTOMIZADO */
 .ui-datepicker-trigger {
   border: 0;

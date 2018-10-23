@@ -1,5 +1,5 @@
 /*
-*	Page: /entry/month-config/*
+*	Page: /goal/month-config/*
 */
 
 let express 	= require("express"),
@@ -18,7 +18,7 @@ let express 	= require("express"),
 //=============================
 
 //SHOW MonthConfig JSON
-router.get('/:month_id', middleware.isLoggedIn, function(req, res) {
+router.get('/:month_id', middleware.checkOwnership, function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     MonthConfig.findById(req.params.month_id).exec(function(err, groupsList){
             res.send(JSON.stringify(groupsList));
@@ -26,15 +26,15 @@ router.get('/:month_id', middleware.isLoggedIn, function(req, res) {
 });
 
 //Make update in Month-config
-router.put("/:month_id", middleware.isLoggedIn, function(req, res){
+router.put("/:month_id", middleware.checkOwnership, function(req, res){
 	req.body.monthConfig.balanceAccountBank = numeral(req.body.monthConfig.balanceAccountBank).value();
 	req.body.monthConfig.balanceCreditCard = numeral(req.body.monthConfig.balanceCreditCard).value();
 
 	MonthConfig.findOneAndUpdate({_id: req.params.month_id},{
 		$set: {
-	  	balanceAccountBank: req.body.monthConfig.balanceAccountBank,
-	  	balanceCreditCard: req.body.monthConfig.balanceCreditCard,
-	  	isDefined: true
+		  	balanceAccountBank: req.body.monthConfig.balanceAccountBank,
+		  	balanceCreditCard: req.body.monthConfig.balanceCreditCard,
+		  	isDefined: true
 	  	}
 	  }, 
 	  function(err, savedMonthConfig){
@@ -46,9 +46,13 @@ router.put("/:month_id", middleware.isLoggedIn, function(req, res){
             console.log("Mês foi configurado");
             console.log(savedMonthConfig);
         }
-        res.redirect("/entry");
+        res.redirect("/goal");
 	});
 });
 
+//Delete an entry
+router.put("/:month_id", middleware.checkOwnership, function(req, res){
+
+});
 
 module.exports = router
