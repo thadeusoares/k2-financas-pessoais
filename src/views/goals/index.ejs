@@ -1,0 +1,213 @@
+<% include ../partials/header %>
+<div class="content">
+  <div class="container-fluid">
+  	 <!-- START MONTH CONFIG -->
+	<div class="row">
+	    <div class="col-md-12">
+	      <form action="/goal/month-config/<%=monthConfig._id%>?_method=PUT" method="POST" id="formUpdate">
+	        <div class="card">
+	          <div class="card-header card-header-info card-header-lancamento">
+	            <h4 class="card-title">Lançamentos</h4>
+	            <p class="card-category">A cada início de mês, informe o saldo de sua conta e cartão
+	              <span class="setup-month-icon" style=" <%=monthConfig.isDefined?"":"display: none;"%>">
+	                <a href="#">Configurar <span id="monthWorking"><%=monthConfig.monthYearLabel%></span> <i class="fa fa-cogs"></i></a>
+	              </span>
+	            </p>
+	          </div>
+	          <div class="card-body">
+	            <div class="collapse <%=monthConfig.isDefined?"hidden":"show"%>" id="setupMonth">
+	              <div class="row">
+	                <div class="col-md-3 form-group bmd-form-group">
+	                  <label for="inputGroupSelect04" class="bmd-label-static" style="margin-left: 15px">Escolha um mês</label>
+	                  <div class="input-group">
+	                    <div class="input-group-prepend">
+	                      <span class="input-group-text">
+	                        <i class="fa fa-calendar"></i>
+	                      </span>
+	                    </div>
+	                    <select class="form-control" id="inputGroupSelect04" name="monthConfig[dateSetup]" >
+	                      <option value="<%=monthConfig._id%>"><%=monthConfig.monthYearLabel%></option>
+	                      <%  anotherMonths.forEach(function(month) { %>
+	                          <option value="<%=month._id%>"><%=month.monthYearLabel%></option>
+	                      <% });  %>
+	                    </select>                      
+	                  </div>
+	                </div>
+	                <div class="col-md-3 form-group">
+	                  <label for="txtSaldoInicio">Saldo no início do mês</label>
+	                  <div class="input-group">
+	                    <div class="input-group-prepend">
+	                      <span class="input-group-text">
+	                        <i class="fa fa-money"></i>
+	                      </span>
+	                    </div>
+	                    <input type="text" class="form-control money" name="monthConfig[balanceAccountBank]" id="txtSaldoInicio" placeholder="#0,00" value="<%=monthConfig.balanceAccountBankLabel%>">
+	                  </div>
+	                </div>
+	                <div class="col-md-4 form-group">
+	                  <label for="txtSaldoCartaoInicio">Saldo cartão no início do mês</label>
+	                  <div class="input-group">
+	                    <div class="input-group-prepend">
+	                      <span class="input-group-text">
+	                        <i class="fa fa-money"></i>
+	                      </span>
+	                    </div>
+	                    <input type="text" class="form-control money" name="monthConfig[balanceCreditCard]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
+	                  </div>
+	                </div>  
+	                <div class="form-group col-md-2">
+	                  <button class="btn btn-success" style="color: white">Salvar</button>
+	                  <!-- a class="btn btn-success" style="color: white" data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth">Salvar</a -->
+	                </div>
+	              </div>
+	              <div class="row">
+	                  <a data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth" class="btn btn-outline-success btn-sm col-sm-12" style="border:0"><i class="fa fa-angle-up"></i></a>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	      </form>
+	    </div>
+	</div>
+	<!-- END MONTH CONFIG -->
+	<!-- START SUBGROUPS LIST -->
+	<div class="row">
+		<div class="card" id="subgroupsGoals">
+		
+		    <table id="dtVerticalScrollExample" class="table table-shopping table-striped table-hover table-sm">
+		      <tbody>
+		        <!-- INICIO LISTAGEM -->
+		        
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        <tr class="d-flex">
+		          <th scope="row" class="col-1 text-center row-eq-height">
+		              
+		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
+		                <i class="material-icons">compare_arrows</i>
+		              </label>
+		              
+		          </th>
+		          <td class="col-2">22/10/2018</td>
+		          <td class="col-6">Cuidados Pessoais</td>
+		          <td class="col-3">R$ 1.231,23</td>
+		        </tr>
+		        
+		        <!-- FIM LISTAGEM -->
+		      </tbody>
+		    </table>
+		
+		</div>
+	</div>
+	<!-- END OF SUBGROUPS LIST -->
+
+  </div>
+</div>
+
+<% include ../partials/footer %>      

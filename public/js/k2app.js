@@ -280,7 +280,7 @@ var marker = new google.maps.Marker({
    //###############################
    fillEditMonthConfigForm: function(idSubgroup){
    // Populate dropdown with list of provinces
-      let url = "/entry/month-config/"+idSubgroup;
+      let url = "/goal/month-config/"+idSubgroup;
 
       $.getJSON(url, function (monthConfig) {
          let form = $("#formUpdate");
