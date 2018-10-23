@@ -1,0 +1,265 @@
+<% include ../partials/header %>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-info card-header-lancamento">
+            <h4 class="card-title">Grupos / Sub-grupos</h4>
+            <p class="card-category">Escolha um tipo, selecione o grupo (se existir) e salve</p>
+          </div>
+          <div class="card-body">
+            <form action="/subgroup" method="POST"  id="formInsert">
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="typeofGroup" id="exampleRadios1" value="group" checked>
+                      Grupo
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                      <input class="form-check-input " type="radio" name="typeofGroup" id="exampleRadios2" value="subgroup">
+                      Sub-grupo
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <select class="form-control groupType" name="subgroup[group]">
+                    <option value="" selected>Tipo de Despesa</option>
+                    <option value="fixa">Fixa</option>
+                    <option value="variavel">Variável</option>
+                  </select>  
+                </div>  
+                
+                <div class="form-group col-md-3 divParentGroupList" style="display: none;">
+                  <select class="form-control parentGroupList" name="subgroup[subgroupOf]" disabled>
+                    <option selected>Escolha o tipo de despesa</option>
+                    <option value="fixa">Fixa</option>
+                    <option value="variavel">Variável</option>
+                  </select>  
+                </div>  
+                <div class="form-group col-md-4 divDescription">
+                  <input class="form-control" type="text" name="subgroup[description]" placeholder="Descrição">
+                </div> 
+                <div class="form-group col-md-2">
+                  <button class="btn btn-success">Incluir</button>
+                </div>
+              </div>
+             
+            </form>  
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- LISTA DE GRUPOS E SUB-GRUPOS -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-tabs card-header-success">
+            <div class="nav-tabs-navigation">
+              <div class="nav-tabs-wrapper">
+                <span class="nav-tabs-title"></span>
+                <ul class="nav nav-tabs" data-tabs="tabs">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#grupoFixas" data-toggle="tab">
+                      <i class="material-icons">autorenew</i> Fixas
+                      <div class="ripple-container"></div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#messages" data-toggle="tab">
+                      <i class="material-icons">call_split</i> Variáveis
+                      <div class="ripple-container"></div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="tab-pane active" id="grupoFixas">
+                <table class="table">
+                  <tbody>
+                    <% subgroupsFixa.forEach(function(subgroup) {  %>
+                    <tr>
+                      <td>
+                        <%=subgroup.description%>
+                        <table class="table table-hover">
+                          <tbody>
+                        <% if(typeof subgroup.subgroupsInside !== 'undefined' && subgroup.subgroupsInside.length > 0){ %>
+                        <% subgroup.subgroupsInside.filter(subgroupInside=> subgroupInside.isActive)
+                            .forEach(function(subgroupInside) {  %>
+                          <tr>
+                            <td >
+                              <i class="material-icons">subdirectory_arrow_right</i><%=subgroupInside.description%>
+                            </td>
+                            <td class="td-actions text-right">
+                              <!-- EDITAR -->
+                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-link btn-sm btn-edit-subgroup" data-toggle="modal" data-target="#editSubGroupModal" value="<%=subgroupInside._id%>">
+                                <i class="material-icons">edit</i>
+                              </button>
+                              <form method="POST" action="/subgroup/disable/<%=subgroupInside._id%>?_method=PUT">
+                                <button type="submit" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                <i class="material-icons">close</i>
+                              </button>
+                              </form>
+                              <!-- FIM EDITAR -->
+                            </td>
+                          </tr>
+                          <% }); %>
+                        <% } %>
+                          </tbody>
+                        </table>
+                      </td>
+
+                      <td class="td-actions text-right">
+                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-link btn-sm btn-edit-subgroup" data-toggle="modal" data-target="#editSubGroupModal" value="<%=subgroup._id%>">
+                          <i class="material-icons">edit</i>
+                        </button>
+                        <form method="POST" action="/subgroup/disable/<%=subgroup._id%>?_method=PUT">
+                          <button type="submit" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                            <i class="material-icons">close</i>
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="messages">
+                <table class="table">
+                  <tbody>
+                    <% subgroupsVariaveis.forEach(function(subgroup) {  %>
+                    <tr>
+                      <td>
+                        <%=subgroup.description%>
+                        <table class="table table-hover">
+                          <tbody>
+                        <% if(typeof subgroup.subgroupsInside !== 'undefined' && subgroup.subgroupsInside.length > 0){ %>
+                        <% subgroup.subgroupsInside.filter(subgroupInside=> subgroupInside.isActive)
+                            .forEach(function(subgroupInside) {  %>
+                          <tr>
+                            <td >
+                              <i class="material-icons">subdirectory_arrow_right</i><%=subgroupInside.description%>
+                            </td>
+                            <td class="td-actions text-right">
+                              <!-- EDITAR -->
+                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-link btn-sm btn-edit-subgroup" data-toggle="modal" data-target="#editSubGroupModal" value="<%=subgroupInside._id%>">
+                                <i class="material-icons">edit</i>
+                              </button>
+                              <form method="POST" action="/subgroup/disable/<%=subgroupInside._id%>?_method=PUT">
+                                <button type="submit" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                <i class="material-icons">close</i>
+                              </button>
+                              </form>
+                              <!-- FIM EDITAR -->
+                            </td>
+                          </tr>
+                          <% }); %>
+                        <% } %>
+                          </tbody>
+                        </table>
+                      </td>
+
+                      <td class="td-actions text-right">
+                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-link btn-sm btn-edit-subgroup" data-toggle="modal" data-target="#editSubGroupModal" value="<%=subgroup._id%>">
+                          <i class="material-icons">edit</i>
+                        </button>
+                        <form method="POST" action="/subgroup/disable/<%=subgroup._id%>?_method=PUT">
+                          <button type="submit" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                            <i class="material-icons">close</i>
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Edit -->
+<div class="modal fade" id="editSubGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action="" method="POST" id="formUpdate">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar grupo / sub-grupo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+              <div class="row">
+                <div class="form-group col-sm-12">
+                  <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="typeofGroup" id="exampleRadios1" value="group" checked>
+                      Grupo
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                      <input class="form-check-input " type="radio" name="typeofGroup" id="exampleRadios2" value="subgroup">
+                      Sub-grupo
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-12">
+                  <select class="form-control groupType" name="subgroup[group]">
+                    <option>Tipo de Despesa</option>
+                    <option value="fixa">Fixa</option>
+                    <option value="variavel">Variável</option>
+                  </select>  
+                </div>
+              </div>
+              
+              <div class="row">  
+                <div class="form-group col-sm-12 divParentGroupList" style="display: none;">
+                  <select class="form-control parentGroupList" name="subgroup[subgroupOf]" disabled>
+                    <option selected>Escolha o tipo de despesa</option>
+                    <option value="fixa">Fixa</option>
+                    <option value="variavel">Variável</option>
+                  </select>  
+                </div>  
+              </div>
+              <div class="row">  
+                <div class="form-group col-sm-12 divDescription">
+                  <input class="form-control" type="text" name="subgroup[description]" placeholder="Descrição">
+                </div> 
+              </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-success">Atualizar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<% include ../partials/footer %>      

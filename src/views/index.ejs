@@ -1,0 +1,72 @@
+<% include partials/header_html.ejs %>
+
+
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand" href="https://demos.creative-tim.com/material-kit/index.html">
+        K2 Investimento </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="page-header header-filter" style="background-image: url('/images/bgIntroK2.jpg'); background-size: cover; background-position: top center;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 ml-auto mr-auto" style="padding-top: 15%; z-index:1 !important">
+          <div class="card card-nav-tabs text-center">
+            <form class="form" method="POST" action="/login">
+            <div class="card-header card-header-info">
+              Login
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Seja bem-vindo</h4>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="material-icons">mail</i>
+                  </span>
+                </div>
+                <input type="email" name="username" class="form-control" placeholder="E-mail...">
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="material-icons">lock_outline</i>
+                  </span>
+                </div>
+                <input type="password"  name="password" class="form-control" placeholder="Senha...">
+              </div>
+              <button class="btn btn-info">ENTRAR</button>
+            </div>
+            </form>
+            <!-- div class="card-footer text-muted">
+              2 days ago
+            </div -->
+          </div>          
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="copyright float-right">
+          &copy;
+          <script>
+            document.write(new Date().getFullYear())
+          </script>, made with <i class="material-icons">favorite</i> by
+          <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web.
+        </div>
+      </div>
+    </footer>
+</div>
+
+
+  <% include partials/footer_js %>
+</body>
+
+</html>
