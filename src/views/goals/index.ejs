@@ -6,7 +6,7 @@
 	    <div class="col-md-12">
 	      <form action="/goal/month-config/<%=monthConfig._id%>?_method=PUT" method="POST" id="formUpdate">
 	        <div class="card">
-	          <div class="card-header card-header-info card-header-lancamento">
+	          <div class="card-header card-header-info card-header-danger">
 	            <h4 class="card-title">Lançamentos</h4>
 	            <p class="card-category">A cada início de mês, informe o saldo de sua conta e cartão
 	              <span class="setup-month-icon" style=" <%=monthConfig.isDefined?"":"display: none;"%>">
@@ -14,7 +14,7 @@
 	              </span>
 	            </p>
 	          </div>
-	          <div class="card-body">
+	          <div class="card-body has-danger">
 	            <div class="collapse <%=monthConfig.isDefined?"hidden":"show"%>" id="setupMonth">
 	              <div class="row">
 	                <div class="col-md-3 form-group bmd-form-group">
@@ -72,137 +72,86 @@
 	<!-- END MONTH CONFIG -->
 	<!-- START SUBGROUPS LIST -->
 	<div class="row">
-		<div class="card" id="subgroupsGoals">
-		
-		    <table id="dtVerticalScrollExample" class="table table-shopping table-striped table-hover table-sm">
-		      <tbody>
-		        <!-- INICIO LISTAGEM -->
-		        
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        <tr class="d-flex">
-		          <th scope="row" class="col-1 text-center row-eq-height">
-		              
-		              <label class="btn btn-xs btn-secondary btn-outline-danger  btnApontamento">
-		                <i class="material-icons">compare_arrows</i>
-		              </label>
-		              
-		          </th>
-		          <td class="col-2">22/10/2018</td>
-		          <td class="col-6">Cuidados Pessoais</td>
-		          <td class="col-3">R$ 1.231,23</td>
-		        </tr>
-		        
-		        <!-- FIM LISTAGEM -->
-		      </tbody>
-		    </table>
-		
+		<div class="card">
+			<div class="card-header card-header-icon card-header-danger">
+            	<div class="card-icon">
+					<i class="material-icons">assignment</i>
+            	</div>
+           		<h4 class="card-title ">Metas</h4>
+          	</div>
+			<div class="card-body table-hover">
+            <div class="table-responsive">
+				<table class="table">
+					<thead class="text-danger">
+						<tr>
+		                  <th>ID</th>
+		                  <th>Grupo</th>
+		                  <th>Meta</th>
+		                  <th class="text-center">Ação</th>
+						</tr>
+					</thead>
+                <tbody>
+                  <tr>
+                    <td><i class="material-icons">autorenew</i></td>
+                    <td>Cuidados Pessoais</td>
+                    <td class="has-danger">
+                    	<input type="text" class="form-control form-goal money" name="goal[value]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
+                    </td>
+                    <td class="td-actions text-center">
+                    	<button type="button" rel="tooltip" class="btn btn-success">
+                    		<i class="material-icons">save</i>
+                		</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><i class="material-icons">autorenew</i></td>
+                    <td>Empréstimo</td>
+                    <td class="has-danger">
+                    	<input type="text" class="form-control form-goal money" name="goal[value]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
+                    </td>
+                    <td class="td-actions text-center">
+                    	<button type="button" rel="tooltip" class="btn btn-success">
+                    		<i class="material-icons">save</i>
+                		</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><i class="material-icons">autorenew</i></td>
+                    <td>Moradia</td>
+                    <td class="has-danger">
+                    	<input type="text" class="form-control  money" name="goal[value]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
+                    </td>
+                    <td class="td-actions text-center">
+                    	<button type="button" rel="tooltip" class="btn btn-success">
+                    		<i class="material-icons">save</i>
+                		</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><i class="material-icons">call_split</i></td>
+                    <td>
+                    	Almoço <br>
+                    	|_Almoço de Domingo<br>
+                    	|_Almoço de Sábado<br>
+                    </td>
+                    <td class="has-danger">
+                    	<input type="text" class="form-control  money" name="goal[value]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
+                    </td>
+                    <td class="td-actions text-center">
+                    	<button type="button" rel="tooltip" class="btn btn-success">
+                    		<i class="material-icons">save</i>
+                		</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class=" text-center">
+				<button type="button" rel="tooltip" class="btn btn-success">
+					<i class="material-icons">save</i> Salvar tudo
+				</button>
+            </div>
 		</div>
 	</div>
 	<!-- END OF SUBGROUPS LIST -->

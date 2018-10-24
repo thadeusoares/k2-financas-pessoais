@@ -66,6 +66,15 @@ a.linkGroup:focus, a.linkGroup:hover {
   overflow-y: scroll;
 }
 
+/*.form-goal:focus, bmd-form-group.is-focused .form-goal, disabled {
+    
+    background-image: 
+      linear-gradient(to top, #ea4541 2px, rgba(156, 39, 176, 0) 2px), 
+      linear-gradient(to top, #d2d2d2 1px, 
+      rgba(210, 210, 210, 0) 1px) !important;
+}*/
+
+
 /* CUSTOMIZADO */
 .ui-datepicker-trigger {
   border: 0;
@@ -84,15 +93,16 @@ a.linkGroup:focus, a.linkGroup:hover {
 
 .is-focused [class^='bmd-label'],
 .is-focused [class*=' bmd-label'] {
-  color: #12494f; }
+  color: #12494f; 
+}
 
-.form-control:focus, bmd-form-group.is-focused .form-control, disabled {
+/*.form-control:focus, bmd-form-group.is-focused .form-control, disabled {
     
     background-image: 
       linear-gradient(to top, #12494f 2px, rgba(156, 39, 176, 0) 2px), 
       linear-gradient(to top, #d2d2d2 1px, 
       rgba(210, 210, 210, 0) 1px);
-}
+}*/
 
 .menuk2 > li > .dropdown-menu > a:hover {
 	background-color: #00bcd4 !important;
@@ -105,6 +115,9 @@ a.linkGroup:focus, a.linkGroup:hover {
 .tabk2 > li > div > .dropdown-item:hover {
    background-color: #E63B37;   
 }
+
+
+
 /* offline-doc */
 
 .offline-doc .navbar.navbar-transparent {
