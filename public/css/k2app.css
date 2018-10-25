@@ -75,6 +75,21 @@ a.linkGroup:focus, a.linkGroup:hover {
 }*/
 
 
+/* GRAFICOS SEPARAR DEPOIS*/
+.barra1 {
+  fill: #00bcd4;
+}
+.barra2 {
+  fill: #f44336;
+ 
+}
+
+/* COR DA LABEL */
+#chartEntriesByGroup .ct-label {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
+}
+
 /* CUSTOMIZADO */
 .ui-datepicker-trigger {
   border: 0;

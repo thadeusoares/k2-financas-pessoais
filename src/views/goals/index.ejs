@@ -3,79 +3,77 @@
   <div class="container-fluid">
   	 <!-- START MONTH CONFIG -->
 	<div class="row">
-	    <div class="col-md-12">
-	      <form action="/goal/month-config/<%=monthConfig._id%>?_method=PUT" method="POST" id="formUpdate">
-	        <div class="card">
-	          <div class="card-header card-header-info card-header-danger">
-	            <h4 class="card-title">Lançamentos</h4>
-	            <p class="card-category">A cada início de mês, informe o saldo de sua conta e cartão
-	              <span class="setup-month-icon" style=" <%=monthConfig.isDefined?"":"display: none;"%>">
-	                <a href="#">Configurar <span id="monthWorking"><%=monthConfig.monthYearLabel%></span> <i class="fa fa-cogs"></i></a>
-	              </span>
-	            </p>
-	          </div>
-	          <div class="card-body has-danger">
-	            <div class="collapse <%=monthConfig.isDefined?"hidden":"show"%>" id="setupMonth">
-	              <div class="row">
-	                <div class="col-md-3 form-group bmd-form-group">
-	                  <label for="inputGroupSelect04" class="bmd-label-static" style="margin-left: 15px">Escolha um mês</label>
-	                  <div class="input-group">
-	                    <div class="input-group-prepend">
-	                      <span class="input-group-text">
-	                        <i class="fa fa-calendar"></i>
-	                      </span>
-	                    </div>
-	                    <select class="form-control" id="inputGroupSelect04" name="monthConfig[dateSetup]" >
-	                      <option value="<%=monthConfig._id%>"><%=monthConfig.monthYearLabel%></option>
-	                      <%  anotherMonths.forEach(function(month) { %>
-	                          <option value="<%=month._id%>"><%=month.monthYearLabel%></option>
-	                      <% });  %>
-	                    </select>                      
-	                  </div>
-	                </div>
-	                <div class="col-md-3 form-group">
-	                  <label for="txtSaldoInicio">Saldo no início do mês</label>
-	                  <div class="input-group">
-	                    <div class="input-group-prepend">
-	                      <span class="input-group-text">
-	                        <i class="fa fa-money"></i>
-	                      </span>
-	                    </div>
-	                    <input type="text" class="form-control money" name="monthConfig[balanceAccountBank]" id="txtSaldoInicio" placeholder="#0,00" value="<%=monthConfig.balanceAccountBankLabel%>">
-	                  </div>
-	                </div>
-	                <div class="col-md-4 form-group">
-	                  <label for="txtSaldoCartaoInicio">Saldo cartão no início do mês</label>
-	                  <div class="input-group">
-	                    <div class="input-group-prepend">
-	                      <span class="input-group-text">
-	                        <i class="fa fa-money"></i>
-	                      </span>
-	                    </div>
-	                    <input type="text" class="form-control money" name="monthConfig[balanceCreditCard]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
-	                  </div>
-	                </div>  
-	                <div class="form-group col-md-2">
-	                  <button class="btn btn-success" style="color: white">Salvar</button>
-	                  <!-- a class="btn btn-success" style="color: white" data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth">Salvar</a -->
-	                </div>
-	              </div>
-	              <div class="row">
-	                  <a data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth" class="btn btn-outline-success btn-sm col-sm-12" style="border:0"><i class="fa fa-angle-up"></i></a>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-	      </form>
-	    </div>
+		<div class="card">
+		<form action="/goal/month-config/<%=monthConfig._id%>?_method=PUT" method="POST" id="formUpdate">
+          <div class="card-header card-header-info card-header-success">
+            <h4 class="card-title">Saldo Inicial</h4>
+            <p class="card-category">A cada início de mês, informe o saldo de sua conta e cartão
+              <span class="setup-month-icon" style=" <%=monthConfig.isDefined?"":"display: none;"%>">
+                <a href="#">Configurar <span id="monthWorking"><%=monthConfig.monthYearLabel%></span> <i class="fa fa-cogs"></i></a>
+              </span>
+            </p>
+          </div>
+          <div class="card-body has-success">
+            <div class="collapse <%=monthConfig.isDefined?"hidden":"show"%>" id="setupMonth">
+              <div class="row">
+                <div class="col-md-3 form-group bmd-form-group">
+                  <label for="inputGroupSelect04" class="bmd-label-static" style="margin-left: 15px">Escolha um mês</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+                    </div>
+                    <select class="form-control" id="inputGroupSelect04" name="monthConfig[dateSetup]" >
+                      <option value="<%=monthConfig._id%>"><%=monthConfig.monthYearLabel%></option>
+                      <%  anotherMonths.forEach(function(month) { %>
+                          <option value="<%=month._id%>"><%=month.monthYearLabel%></option>
+                      <% });  %>
+                    </select>                      
+                  </div>
+                </div>
+                <div class="col-md-3 form-group">
+                  <label for="txtSaldoInicio">Saldo no início do mês</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-money"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control money" name="monthConfig[balanceAccountBank]" id="txtSaldoInicio" placeholder="#0,00" value="<%=monthConfig.balanceAccountBankLabel%>">
+                  </div>
+                </div>
+                <div class="col-md-4 form-group">
+                  <label for="txtSaldoCartaoInicio">Saldo cartão no início do mês</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-money"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control money" name="monthConfig[balanceCreditCard]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
+                  </div>
+                </div>  
+                <div class="form-group col-md-2">
+                  <button class="btn btn-success" style="color: white">Salvar</button>
+                  <!-- a class="btn btn-success" style="color: white" data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth">Salvar</a -->
+                </div>
+              </div>
+              <div class="row">
+                  <a data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth" class="btn btn-outline-success btn-sm col-sm-12" style="border:0"><i class="fa fa-angle-up"></i></a>
+              </div>
+            </div>
+          </div>
+          </form>
+        </div>
 	</div>
 	<!-- END MONTH CONFIG -->
 	<!-- START SUBGROUPS LIST -->
 	<div class="row">
 		<div class="card">
-			<div class="card-header card-header-icon card-header-danger">
+			<div class="card-header card-header-icon card-header-success">
             	<div class="card-icon">
-					<i class="material-icons">assignment</i>
+					<i class="material-icons">person_pin_circle</i>
             	</div>
            		<h4 class="card-title ">Metas</h4>
           	</div>

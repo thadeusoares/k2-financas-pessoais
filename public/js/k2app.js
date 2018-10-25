@@ -1,33 +1,62 @@
 k2App = {
  
 initDashboardPageCharts: function() {
-   if ($('#dailySalesChart').length != 0 || $('#completedTasksChart').length != 0 || $('#websiteViewsChart').length != 0) {
+   if ($('#dailySalesChart').length != 0 || $('#completedTasksChart').length != 0 || $('#chartEntriesByGroup').length != 0) {
+
+    /* ############## DESPESAS ################ */
+    var dataPreferences = {
+      labels: ['60%', '16%', '16%', '6%', '2%'],
+      series: [60, 16, 16, 6, 2]
+    };
+
+    var dataPreferences = {
+      //Construir lógica para escolher as cores depois
+      series: [{
+        value: 80,
+        name: "80%",
+        className: "barra1",
+        meta: "Meta 100",
+      },{
+        value: 20,
+        name: "20%",
+        className: "barra2",
+        meta: "Meta 100",
+      }],
+      
+    };
+
+    var optionsPreferences = {
+      height: '230px'
+    };
+
+    var entriesByGroupChart = Chartist.Pie('#chartEntriesByGroup', dataPreferences, optionsPreferences);
+    md.startAnimationForLineChart(entriesByGroupChart);
+
+    
+
+
    /* ----------==========     Daily Sales Chart initialization    ==========---------- */
 
-      dataDailySalesChart = {
-       labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-       series: [
-       [12, 17, 7, 17, 23, 18, 38]
-       ]
-   };
+    dataDailySalesChart = {
+      labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+      series: [
+        [12, 17, 7, 17, 23, 18, 38]
+      ]
+    };
 
- optionsDailySalesChart = {
-    lineSmooth: Chartist.Interpolation.cardinal({
-     tension: 0
-  }),
-    low: 0,
-        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-        chartPadding: {
-           top: 0,
-           right: 0,
-           bottom: 0,
-           left: 0
-        },
-     }
-
-     var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
-
-     md.startAnimationForLineChart(dailySalesChart);
+    optionsDailySalesChart = {
+      lineSmooth: Chartist.Interpolation.cardinal({tension: 0}),
+      low: 0,
+      high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+      chartPadding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      },
+    }
+    var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+    md.startAnimationForLineChart(dailySalesChart);
 
 
 
@@ -59,43 +88,6 @@ initDashboardPageCharts: function() {
       // start animation for the Completed Tasks Chart - Line Chart
       md.startAnimationForLineChart(completedTasksChart);
 
-
-      /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
-
-      var dataWebsiteViewsChart = {
-       labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-       series: [
-       [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-
-       ]
-    };
-    var optionsWebsiteViewsChart = {
-       axisX: {
-        showGrid: false
-     },
-     low: 0,
-     high: 1000,
-     chartPadding: {
-        top: 0,
-        right: 5,
-        bottom: 0,
-        left: 0
-     }
-  };
-  var responsiveOptions = [
-  ['screen and (max-width: 640px)', {
-    seriesBarDistance: 5,
-    axisX: {
-     labelInterpolationFnc: function(value) {
-        return value[0];
-     }
-  }
-  }]
-  ];
-      var websiteViewsChart = Chartist.Bar('#websiteViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
-
-      //start animation for the Emails Subscription Chart
-      md.startAnimationForBarChart(websiteViewsChart);
    }
 },
 
