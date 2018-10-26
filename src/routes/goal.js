@@ -84,6 +84,12 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 
 //Realiza a inclusão / atualizacao baseado em uma data
 router.put("/:month/:year", function(req, res){
+	console.log(req.body.subgroup);
+	req.body.subgroup.forEach(function(goals){
+		console.log("#######################");
+		console.log("ID: "+ goals.id);
+		console.log("Valor: "+ numeral(goals.valueOfGoal).value());
+	});
 	res.send("Salvando as metas dos subgrupos");
 });
 
