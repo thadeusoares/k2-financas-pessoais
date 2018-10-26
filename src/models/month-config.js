@@ -33,6 +33,7 @@ MonthConfigSchema.virtual('monthYearLabel').get(function () {
 MonthConfigSchema.virtual('monthYear').get(function () {
   return moment(this.dateSetup).format('MM/YYYY');
 });
+
 MonthConfigSchema.index( { dateSetup: 1, owner: 1}, { unique: true } );
 MonthConfigSchema.set('toJSON', { virtuals: true })
 

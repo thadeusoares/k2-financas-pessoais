@@ -19,6 +19,10 @@ const SubgroupSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+    goals: [{
+        valueOfGoal: Number,
+        date: Date
+    }],
     owner: {
     	id: {
     		type: mongoose.Schema.Types.ObjectId,

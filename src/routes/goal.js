@@ -8,6 +8,7 @@ let express 	= require("express"),
 	{ PaymentMethods } = require('../models/entry'),
 	Entry 	= require("../models/entry"),
 	MonthConfig 	= require("../models/month-config"),
+	Subgroup 	= require("../models/subgroup"),
 	moment = require('moment'),
 	numeral = require('numeral'),
 	ptBr = require('numeral/locales/pt-br.js');
@@ -61,14 +62,30 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 
 		        	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
 				    .exec(function(err, entriesList){
-				        res.render("goals",{monthConfig: monthConfig, anotherMonths: anotherMonths, entries: entriesList});
+
+				    	//Recupera todos os subgrupos para atribuir metas
+					    Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true})
+					        .populate({path:'subgroupsInside', options: { sort: { 'description': 'asc' } }})
+					        .populate("goals")
+					        .sort({description: 'asc'})
+					        .exec(function(err, subgroupsList){
+					        	res.render("goals",{
+					            	monthConfig: monthConfig, 
+					            	anotherMonths: anotherMonths, 
+					            	entries: entriesList,
+					            	subgroups: subgroupsList
+					            });
+						});
 				    });
 				});
        		}
 	});
 });
 
-
+//Realiza a inclusão / atualizacao baseado em uma data
+router.put("/:month/:year", function(req, res){
+	res.send("Salvando as metas dos subgrupos");
+});
 
 
 module.exports = router

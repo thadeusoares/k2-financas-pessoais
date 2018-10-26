@@ -13,8 +13,16 @@ moment.locale('pt-br');
 numeral.locale('pt-br');
 
 
+let date1 = moment().startOf('month').toDate();//moment.parse(moment(now, '01-MM-YYYY'),'DD-MM-YYYY');
+let date2 = moment().startOf('month').add(-1,'M').toDate();
+
 var subgroups = [
-{ group: 'fixa', description: "Moradia" },
+{ group: 'fixa', description: "Moradia", 
+    goals:[{
+        date: date1,
+        valueOfGoal: 1000.50
+    }] 
+},
 { group: 'fixa', description: "Cuidados Pessoais" },
 { group: 'fixa', description: "Empréstimo"},
 { group: 'variavel', description: "Lazer" },
@@ -30,8 +38,6 @@ var subgruposEmprestimo = [
 { group: 'fixa',    description: "Cooperforte"/*,    subgroupOf: subgroupSaved._id */ },
 ];
 
-let date1 = moment().startOf('month').toDate();//moment.parse(moment(now, '01-MM-YYYY'),'DD-MM-YYYY');
-let date2 = moment().startOf('month').add(-1,'M').toDate();
 
 var monthsConfig = [
 { balanceAccountBank: 0.0, balanceCreditCard: 0.0, dateSetup: date1 },
