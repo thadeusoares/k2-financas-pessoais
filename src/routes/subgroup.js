@@ -5,7 +5,7 @@
 let express 	= require("express"),
 	router 		= express.Router(),
 	middleware 	= require("../middlewares"),
-	Subgroup 	= require("../models/subgroup")
+	Subgroup 	= require("../models/subgroup");
 
 
     
