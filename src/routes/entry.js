@@ -18,6 +18,8 @@ let express 	= require("express"),
 router.use(function(req, res, next){
    res.locals.moment = moment;
    res.locals.numeral = numeral;
+   res.locals.paymentMethod = PaymentMethods;
+
    next();
 });
 
@@ -115,6 +117,25 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 	});
 });
 
+
+router.get("/:entry_id/edit",  function(req, res) {
+	Entry.findById(req.params.entry_id, function(err, entry){
+       if(err) {
+           req.flash("error", err.message);
+            console.log(err);
+       }
+       res.render("entries/edit", {entry: entry});
+    });
+	//res.send("Editando :"+req.params.entry_id);
+});
+
+router.put("/:entry_id", function(req, res) {
+	console.log(req.body.entry);
+	console.log(Object.keys(PaymentMethods).find(key => PaymentMethods[key] === req.body.entry.paymentMethod));
+	res.send("Editando :"+req.body.entry);
+});
+
+
 router.get('/:year/:month/json', middleware.isLoggedIn, function(req, res) {
 
 	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
@@ -124,6 +145,18 @@ router.get('/:year/:month/json', middleware.isLoggedIn, function(req, res) {
     Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
     .exec(function(err, entriesList){
             res.send(JSON.stringify(entriesList));
+    });
+});
+
+router.delete("/:entry_id", middleware.checkOwnership, function(req, res) {
+	Entry.findByIdAndRemove(req.params.entry_id, function(err){
+       if(err) {
+           req.flash("error", err.message);
+            console.log(err);
+       }else{
+            req.flash("success", "Lançamento excluído com sucesso");
+       }
+       res.redirect("/entry");
     });
 });
 
