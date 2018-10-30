@@ -1,0 +1,130 @@
+<% include ../partials/header %>
+<div class="content">
+  <div class="container-fluid">
+    <!-- START NEW ENTRY -->
+    <div class="row">
+      <div class="card">
+       <div class="card-header card-header-icon card-header-danger">
+          <div class="card-icon">
+            <i class="material-icons">attach_money</i>
+          </div>
+          <h4 class="card-title ">Despesas Destaques</h4>
+        </div>
+        <div class="card-body table-hover">
+          <form action="/entry/<%=entry._id%>?_method=PUT" method="POST">
+            <div class="row has-danger">
+              <div class="col-md-5 ">
+                <div class="row">
+                  <div class="col-md-3 col-lg-3 mb-3">
+                        <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+                          <!-- label class="btn btn-outline-success btnApontamento">
+                            <i class="material-icons">attach_money</i>
+                            <input type="radio" name="entry[typeOfEntry]" id="option1" value="in" autocomplete="off">
+                          </label -->
+                          <label class="btn btn-secondary btn-outline-danger active btnApontamento">
+                            <i class="material-icons">compare_arrows</i>
+                            <input type="radio" name="entry[typeOfEntry]" id="option2" value="out" autocomplete="off" checked>
+                          </label>
+                        </div>
+                  </div>
+                  <div class="col-md-9 col-lg-9 mb-3">
+                    <label class="sr-only" for="txtDescricao">Insira aqui a descrição</label>
+                    <div class="input-group input-group-sm">
+                      <input type='text'
+                       placeholder='Insira aqui a descrição'
+                       class='form-control input-very-small-k2'
+                       data-url='/subgroup/groups/json'
+                       data-search-in='["description","descGrupo","subtipo","id"]'
+                       data-visible-properties='["description", "descGrupo", "subtipo"]'
+                       data-group-by='descGrupo'
+                       data-selection-required='true'
+                       data-focus-first-result='true'
+                       data-min-length='1'
+                       data-value-property='*'
+                       data-text-property='{description}, {descGrupo}'
+                       data-search-contain='true'
+                       id='txtDescricao'
+                       name='entry[description]'>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- FIM PRIMEIRO GRUPO -->
+              <!-- SEGUNDO GRUPO -->
+              <div class="col-md-4">
+                <div class="row no-gutters">
+                  <div class="col-lg-6 mb-3">
+                    <div class="input-group">
+                      <select name="entry[paymentMethod]" class="form-control" id="tipoApontamento">
+                        <option>Pagou com...</option>
+                        <optgroup label="Pessoa Física">
+                          <%Object.keys(paymentMethod).filter(key => paymentMethod[key].indexOf("PF") === 0)
+                            .forEach(function(pfCode){ %>
+                          <option value="<%=pfCode%>" <%=(paymentMethod[pfCode]===entry.paymentMethod)?"selected":""%>>
+                              <%=paymentMethod[pfCode]%>
+                          </option>
+                          <% }); %>
+                        </optgroup>
+                        <optgroup label="Pessoa Jurídica">
+                          <%Object.keys(paymentMethod).filter(key => paymentMethod[key].indexOf("PJ") === 0)
+                            .forEach(function(pfCode){ %>
+                          <option value="<%=pfCode%>"  <%(paymentMethod[pfCode]===entry.paymentMethod)?"selected":""%>>
+                            <%=paymentMethod[pfCode]%>
+                          </option>
+                          <% }); %>
+                        </optgroup>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">R$</span>
+                        </div>
+                        <label class="sr-only" for="inlineFormInputGroup2">Insira aqui o valores</label>
+                        <input type="text" name="entry[valueOf]" class="form-control money"  id="inlineFormInputGroup2" placeholder="#0,00">
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <!-- FIM SEGUNDO -->
+              <!-- TERCEIRO GRUPO -->
+              <div class="col-md-3 col-sm-6">
+                <div class="row no-gutters justify-content-center">
+                    <div class="col-md-8 mb-3">
+                      <label class="sr-only" for="inlineDatepicker">Escolha uma data</label>
+                      <div class="input-group ">
+                        <input autocomplete="off" type="text" name="entry[createdIn]" class="form-control form-control-sm datepicker" id="inlineDatepicker" placeholder="Data">
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <button class="btn btn-success btn-sm" id="btnAddEntry"><i class="fa fa-save"></i></button>
+                    </div>
+                </div>
+              </div>
+              <!-- FIM TERCEIRO -->
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- END NEW ENTRY -->
+    
+  </div>
+</div>
+<% include ../partials/footer %>      
+<script type="text/javascript">
+$(document).ready(function() {
+  //PRECISO RECEBER O OBJETO COM TODOS ESTES DADOS E PREENCHER O FLEXLIST
+  $('#txtDescricao').flexdatalist("value", {
+      "id":"5bd0cd1afc9b25116464ee8a",
+      "subtipo":"Almoço",
+      "description":"Almoço de Domingo",
+      "descGrupo":"Despesas Variáveis",
+      "group":"variavel",
+      "description_highlight":"Almoço de Domingo",
+      "subtipo_highlight":"Almoço"
+    }
+  );
+});
+</script>

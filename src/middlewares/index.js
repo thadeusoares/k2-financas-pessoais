@@ -1,4 +1,5 @@
 let MonthConfig = require("../models/month-config")
+let Entry = require("../models/entry")
 
 
 module.exports = {
@@ -22,6 +23,21 @@ module.exports = {
                     }else{
                         // dos user own the campground
                         if(monthConfig.owner.id.equals(req.user._id)){
+                            next();
+                        } else{
+                            req.flash("error","Acesso negado!");
+                            res.redirect("back");
+                        }
+                    }
+                });
+            }else if(res.locals.active === "entry"){
+                Entry.findById(req.params.entry_id, function(err, entry){
+                    if(err){
+                        console.log(err);
+                        res.redirect("back");
+                    }else{
+                        // dos user own the campground
+                        if(entry.owner.id.equals(req.user._id)){
                             next();
                         } else{
                             req.flash("error","Acesso negado!");
