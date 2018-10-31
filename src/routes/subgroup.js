@@ -71,10 +71,10 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 });
 
 //SHOW ALL GROUPS JSON
-router.get('/groups/json', function(req, res) {
+router.get('/groups/json', middleware.isLoggedIn, function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     //{group: "fixa", subgroup.subgroupOf === 'undefined'}
-    Subgroup.find({isActive: true, subgroupOf: null})
+    Subgroup.find({"owner.username": req.user.username, isActive: true, subgroupOf: null})
     .populate({path:'subgroupsInside', options: { sort: { 'description': 'asc' } }})
         .sort({description: 'asc'})
         .exec(function(err, groupsList){
@@ -110,30 +110,30 @@ router.get('/groups/json', function(req, res) {
 })
 
 //SHOW GROUPS JSON
-router.get('/groups/:group/json', middleware.isLoggedIn,function(req, res) {
-    var group = req.sanitize(req.params.group);
+router.get('/groups/:grupo/json', middleware.isLoggedIn,function(req, res) {
+    var group = req.sanitize(req.params.grupo);
     res.setHeader('Content-Type', 'application/json');
     //{group: "fixa", subgroup.subgroupOf === 'undefined'}
-    Subgroup.find({group: group, subgroupOf: null, isActive: true}, function(err, groupsList){
+    Subgroup.find({"owner.username": req.user.username, group: group, subgroupOf: null, isActive: true}, function(err, groupsList){
             res.send(JSON.stringify(groupsList));
     });
 })
 
 //SHOW SUBGROUP JSON
-router.get('/:id/json', middleware.isLoggedIn,function(req, res) {
-    var group = req.sanitize(req.params.id);
+router.get('/:subgroup_id/json', middleware.checkOwnership,function(req, res) {
+    var group = req.sanitize(req.params.subgroup_id);
     res.setHeader('Content-Type', 'application/json');
-    Subgroup.findById(req.params.id, function(err, groupsList){
+    Subgroup.findById(req.params.subgroup_id, function(err, groupsList){
             res.send(JSON.stringify(groupsList));
     });
 })
 
 // UPDATE ROUTE
-router.put("/:id", function(req, res){
+router.put("/:subgroup_id", middleware.checkOwnership, function(req, res){
     
     req.body.subgroup.description = req.sanitize(req.body.subgroup.description);
 
-    Subgroup.findOneAndUpdate({_id: req.params.id},  {$set: req.body.subgroup},function(err, updatedSubgroup){
+    Subgroup.findOneAndUpdate({_id: req.params.subgroup_id},  {$set: req.body.subgroup},function(err, updatedSubgroup){
         if(err){
             req.flash("error", err.message);
             console.log(err);
@@ -143,7 +143,7 @@ router.put("/:id", function(req, res){
         if(typeof req.body.subgroup.subgroupOf !== 'undefined'){
             //Identifica pai anterior
             //db.subgroups.find({"subgroupsInside":ObjectId("5bafb0d277c62c0592fb2127")})
-            Subgroup.findOne({"subgroupsInside": req.params.id}, function(err, foundOldSubgroupOf){
+            Subgroup.findOne({"subgroupsInside": req.params.subgroup_id}, function(err, foundOldSubgroupOf){
                 if(err){
                     console.log("####################");
                     console.log(err);
@@ -153,7 +153,7 @@ router.put("/:id", function(req, res){
 
                 //Remove o registro
                 console.log(foundOldSubgroupOf);
-                foundOldSubgroupOf.subgroupsInside.pull({_id:req.params.id});
+                foundOldSubgroupOf.subgroupsInside.pull({_id:req.params.subgroup_id});
                 foundOldSubgroupOf.save(function(err, oldSubGroup){
                     console.log("SubgroupOf removido");
                     //Inclui em novo pai
@@ -178,8 +178,8 @@ router.put("/:id", function(req, res){
 });
 
 // UPDATE ROUTE
-router.put("/disable/:id", middleware.isLoggedIn, function(req, res){
-    Subgroup.findOneAndUpdate({_id: req.params.id},  {$set: {isActive: false }},function(err, updateSubgroup){
+router.put("/disable/:subgroup_id", middleware.checkOwnership, function(req, res){
+    Subgroup.findOneAndUpdate({_id: req.params.subgroup_id},  {$set: {isActive: false }},function(err, updateSubgroup){
         console.log(updateSubgroup);
         if(err){
             req.flash("error", err.message);

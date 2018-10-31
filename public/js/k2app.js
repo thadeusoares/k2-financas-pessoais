@@ -272,13 +272,13 @@ var marker = new google.maps.Marker({
    //###############################
    fillEditMonthConfigForm: function(idSubgroup){
    // Populate dropdown with list of provinces
-      let url = "/goal/month-config/"+idSubgroup;
+      let url = "/month-config/"+idSubgroup;
 
-      $.getJSON(url, function (monthConfig) {
+      $.getJSON(url+"/json", function (monthConfig) {
          let form = $("#formUpdate");
 
          //form.find("input[name='typeofGroup']").prop('checked', false); 
-         form.attr("action",url+"?_method=PUT");
+         form.attr("action",url+"/edit?_method=PUT");
          form.find("input[name='monthConfig[balanceAccountBank]']").val(monthConfig.balanceAccountBankLabel);
          form.find("input[name='monthConfig[balanceCreditCard]']").val(monthConfig.balanceCreditCardLabel);
          $("#monthWorking").text(monthConfig.monthYearLabel);

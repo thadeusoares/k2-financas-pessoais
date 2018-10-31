@@ -4,7 +4,7 @@
   	 <!-- START MONTH CONFIG -->
 	<div class="row">
 		<div class="card">
-		<form action="/goal/month-config/<%=monthConfig._id%>?_method=PUT" method="POST" id="formUpdate">
+		<form action="/month-config/<%=monthConfig._id%>/edit?_method=PUT" method="POST" id="formUpdate">
           <div class="card-header card-header-info card-header-success">
             <h4 class="card-title">Saldo Inicial</h4>
             <p class="card-category">A cada início de mês, informe o saldo de sua conta e cartão
@@ -40,7 +40,7 @@
                         <i class="fa fa-money"></i>
                       </span>
                     </div>
-                    <input type="text" class="form-control money" name="monthConfig[balanceAccountBank]" id="txtSaldoInicio" placeholder="#0,00" value="<%=monthConfig.balanceAccountBankLabel%>">
+                    <input type="text" required="true" aria-required="true" class="form-control money" name="monthConfig[balanceAccountBank]" id="txtSaldoInicio" placeholder="#0,00" value="<%=monthConfig.balanceAccountBankLabel%>">
                   </div>
                 </div>
                 <div class="col-md-4 form-group">
@@ -51,11 +51,11 @@
                         <i class="fa fa-money"></i>
                       </span>
                     </div>
-                    <input type="text" class="form-control money" name="monthConfig[balanceCreditCard]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
+                    <input type="text" required="true" aria-required="true" class="form-control money" name="monthConfig[balanceCreditCard]" id="txtSaldoCartaoInicio" placeholder="#0,00" value="<%=monthConfig.balanceCreditCardLabel%>">
                   </div>
                 </div>  
                 <div class="form-group col-md-2">
-                  <button class="btn btn-success" style="color: white">Salvar</button>
+                  <button type="submit" class="btn btn-success" style="color: white">Salvar</button>
                   <!-- a class="btn btn-success" style="color: white" data-toggle="collapse" data-target="#setupMonth" aria-expanded="true" aria-controls="setupMonth">Salvar</a -->
                 </div>
               </div>
@@ -77,7 +77,7 @@
         </div>
         <h4 class="card-title ">Metas</h4>
       </div>
-      <form action="/goal/<%=monthConfig.monthYear%>?_method=PUT" method="POST">
+      <form action="/goal/<%=monthConfig.owner._id%>/<%=monthConfig.monthYear%>/edit?_method=PUT" method="POST">
 			<div class="card-body table-hover">
         <div class="table-responsive">
   				<table class="table">
@@ -109,11 +109,17 @@
                 </td>
                 <td class="has-danger">
                   <input type="hidden" name="subgroup[<%=idx%>][id]" value="<%=subgroup._id%>">
-                  <input type="text" class="form-control form-goal money" 
+                  <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">R$ </span>
+                    </div>
+                    <label class="sr-only" for="inlineFormInputGroup2">Insira aqui o valores</label>
+                    <input type="text" class="form-control form-goal money" required="true" aria-required="true"
                       name="subgroup[<%=idx%>][valueOfGoal]" 
                       id="txtSaldoCartaoInicio" 
                       placeholder="#0,00" 
-                      value="<%=subgroup.goals.length>0?numeral(subgroup.goals.filter(goal => moment(goal.date).isSame(monthConfig.dateSetup) && goal.valueOfGoal)[0].valueOfGoal).format("$ 0,0.00"):"" %>">
+                      value="<%=subgroup.goals.length>0?numeral(subgroup.goals.filter(goal => moment(goal.date).isSame(monthConfig.dateSetup) && goal.valueOfGoal)[0].valueOfGoal).format("0,0.00"):"" %>">                    
+                  </div>
                 </td>
                 <td class="td-actions text-center">
                   <button type="button" rel="tooltip" class="btn btn-success">

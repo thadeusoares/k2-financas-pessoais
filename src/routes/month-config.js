@@ -1,5 +1,5 @@
 /*
-*	Page: /goal/month-config/*
+*	Page: /month-config/*
 */
 
 let express 	= require("express"),
@@ -18,7 +18,7 @@ let express 	= require("express"),
 //=============================
 
 //SHOW MonthConfig JSON
-router.get('/:month_id', middleware.checkOwnership, function(req, res) {
+router.get('/:month_id/json', middleware.checkOwnership, function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     MonthConfig.findById(req.params.month_id).exec(function(err, groupsList){
             res.send(JSON.stringify(groupsList));
@@ -26,7 +26,7 @@ router.get('/:month_id', middleware.checkOwnership, function(req, res) {
 });
 
 //Make update in Month-config
-router.put("/:month_id", middleware.checkOwnership, function(req, res){
+router.put("/:month_id/edit", middleware.checkOwnership, function(req, res){
 	req.body.monthConfig.balanceAccountBank = numeral(req.body.monthConfig.balanceAccountBank).value();
 	req.body.monthConfig.balanceCreditCard = numeral(req.body.monthConfig.balanceCreditCard).value();
 
@@ -48,11 +48,6 @@ router.put("/:month_id", middleware.checkOwnership, function(req, res){
         }
         res.redirect("/goal");
 	});
-});
-
-//Delete an entry
-router.put("/:month_id", middleware.checkOwnership, function(req, res){
-
 });
 
 module.exports = router

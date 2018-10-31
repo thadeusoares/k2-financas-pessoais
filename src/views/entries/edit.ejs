@@ -67,9 +67,9 @@
                         </optgroup>
                         <optgroup label="Pessoa Jurídica">
                           <%Object.keys(paymentMethod).filter(key => paymentMethod[key].indexOf("PJ") === 0)
-                            .forEach(function(pfCode){ %>
-                          <option value="<%=pfCode%>"  <%(paymentMethod[pfCode]===entry.paymentMethod)?"selected":""%>>
-                            <%=paymentMethod[pfCode]%>
+                            .forEach(function(pjCode){ %>
+                          <option value="<%=pjCode%>"  <%=(paymentMethod[pjCode]===entry.paymentMethod)?"selected":""%>>
+                            <%=paymentMethod[pjCode]%>
                           </option>
                           <% }); %>
                         </optgroup>
@@ -82,7 +82,7 @@
                           <span class="input-group-text">R$</span>
                         </div>
                         <label class="sr-only" for="inlineFormInputGroup2">Insira aqui o valores</label>
-                        <input type="text" name="entry[valueOf]" class="form-control money"  id="inlineFormInputGroup2" placeholder="#0,00">
+                        <input type="text" name="entry[valueOf]" class="form-control money"  id="inlineFormInputGroup2" placeholder="#0,00" value="<%=numeral(entry.valueOf).format("0,0.00")%>">
                       </div>
                   </div>
                 </div>
@@ -94,7 +94,7 @@
                     <div class="col-md-8 mb-3">
                       <label class="sr-only" for="inlineDatepicker">Escolha uma data</label>
                       <div class="input-group ">
-                        <input autocomplete="off" type="text" name="entry[createdIn]" class="form-control form-control-sm datepicker" id="inlineDatepicker" placeholder="Data">
+                        <input autocomplete="off" type="text" name="entry[createdIn]" class="form-control form-control-sm datepicker" id="inlineDatepicker" value="<%=moment(entry.createdIn).format("DD/MM/YYYY")%>">
                       </div>
                     </div>
                     <div class="col-md-4 mb-3">
@@ -112,19 +112,11 @@
     
   </div>
 </div>
-<% include ../partials/footer %>      
+<% include ../partials/footer %>    
+
 <script type="text/javascript">
 $(document).ready(function() {
   //PRECISO RECEBER O OBJETO COM TODOS ESTES DADOS E PREENCHER O FLEXLIST
-  $('#txtDescricao').flexdatalist("value", {
-      "id":"5bd0cd1afc9b25116464ee8a",
-      "subtipo":"Almoço",
-      "description":"Almoço de Domingo",
-      "descGrupo":"Despesas Variáveis",
-      "group":"variavel",
-      "description_highlight":"Almoço de Domingo",
-      "subtipo_highlight":"Almoço"
-    }
-  );
+  $('#txtDescricao').flexdatalist("value",  <%- JSON.stringify(entry.txtDescricao) %> );
 });
 </script>
