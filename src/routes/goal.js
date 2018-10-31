@@ -11,7 +11,9 @@ let express 	= require("express"),
 	Subgroup 	= require("../models/subgroup"),
 	moment = require('moment'),
 	numeral = require('numeral'),
-	ptBr = require('numeral/locales/pt-br.js');
+	ptBr = require('numeral/locales/pt-br.js'),
+	async = require('async'),
+	mongoose = require('mongoose');
 
 	moment.locale('pt-br');
 	numeral.locale('pt-br');
@@ -83,14 +85,45 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 });
 
 //Realiza a inclusão / atualizacao baseado em uma data
-router.put("/:month/:year", function(req, res){
+router.put("/:month/:year/edit", middleware.isLoggedIn, function(req, res){
 	console.log(req.body.subgroup);
-	req.body.subgroup.forEach(function(goals){
+	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
+
+	/*req.body.subgroup.forEach(function(goal){
 		console.log("#######################");
-		console.log("ID: "+ goals.id);
-		console.log("Valor: "+ numeral(goals.valueOfGoal).value());
+		console.log("ID: "+ goal.id);
+		console.log("Valor: "+ numeral(goal.valueOfGoal).value());
+
+		Subgroup.findOne({"owner.username": req.user.username, _id:mongoose.Types.ObjectId(goal.id)}).exec(function(err, subgroup){
+			subgroup.goals.push({date: initialDate,valueOfGoal:numeral(goal.valueOfGoal).value()});
+			subgroup.save();
+		});
 	});
-	res.send("Salvando as metas dos subgrupos");
+	
+	req.flash("success", "Registros atualizados com sucesso");
+	res.redirect("/goal");
+	*/
+
+	async.series([
+		function(done){
+			async.each(req.body.subgroup, function(goal, callback){
+				console.log("#######################");
+				console.log("ID: "+ goal.id);
+				console.log("Valor: "+ numeral(goal.valueOfGoal).value());
+				//PRECISO ENCONTRAR SOMENTE UM REGISTRO DE GOALS e removê-lo
+				Subgroup.findOne({"owner.username": req.user.username, _id:mongoose.Types.ObjectId(goal.id)}).
+				exec(function(err, subgroup){
+					subgroup.goals.push({date: initialDate,valueOfGoal:numeral(goal.valueOfGoal).value()});
+					console.log(subgroup);
+					subgroup.save(callback);
+				});
+			}, done);
+		}
+	], function allTaskCompleted(){
+		req.flash("success", "Registros atualizados com sucesso");
+		res.redirect("/goal");
+	});
+
 });
 
 

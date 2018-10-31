@@ -1,5 +1,6 @@
-let MonthConfig = require("../models/month-config")
-let Entry = require("../models/entry")
+let MonthConfig = require("../models/month-config");
+let Subgroup = require("../models/subgroup");
+let Entry = require("../models/entry");
 
 
 module.exports = {
@@ -15,7 +16,22 @@ module.exports = {
 
     checkOwnership: function(req, res, next){
         if(req.isAuthenticated()){
-            if(res.locals.active === "goal"){
+            if(res.locals.active === "subgroup"){
+                Subgroup.findById(req.params.subgroup_id, function(err, subgroup){
+                    if(err){
+                        console.log(err);
+                        res.redirect("back");
+                    }else{
+                        // dos user own the campground
+                        if(subgroup.owner.id.equals(req.user._id)){
+                            next();
+                        } else{
+                            req.flash("error","Acesso negado!");
+                            res.redirect("back");
+                        }
+                    }
+                });
+            } else if(res.locals.active === "month-config"){
                 MonthConfig.findById(req.params.month_id, function(err, monthConfig){
                     if(err){
                         console.log(err);
@@ -30,7 +46,7 @@ module.exports = {
                         }
                     }
                 });
-            }else if(res.locals.active === "entry"){
+            } else if(res.locals.active === "entry"){
                 Entry.findById(req.params.entry_id, function(err, entry){
                     if(err){
                         console.log(err);

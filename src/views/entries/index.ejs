@@ -94,7 +94,7 @@
                       </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                      <button class="btn  <%=monthConfig.isDefined?"btn-success":"btn-disable"%> btn-sm" id="btnAddEntry" <%=monthConfig.isDefined?"":"disabled"%> ><i class="fa fa-plus-square"></i></button>
+                      <button class="btn btn-sm" id="btnAddEntry"><i class="fa fa-plus-square"></i></button>
                     </div>
                 </div>
               </div>
@@ -209,7 +209,7 @@
                     <th scope="col" class="p-2" style="width: 50%">Tipo Despesa</th>
                     <th class="p-2 bd-highlight w-10 text-center ">Previsto</th>
                     <th class="p-2 bd-highlight w-10 text-center ">Realizado</th>
-                    <th class="p-2 bd-highlight text-center ">%</th>
+                    <th class="p-2 bd-highlight text-center">%</th>
                     <th class="p-2 bd-highlight text-center ">Saldo</th>
                   </tr>
                 </thead>
@@ -224,7 +224,7 @@
                     <td class="text-center entryDetailSum">
                       <%=numeral(entries.filter((entry)=>entry.subgroup.group==="fixa").reduce((prev, entry) => prev + entry.valueOf, 0)).format("$ 0,0.00") %>
                     </td>
-                    <td class="text-center entryDetailSum">100%</td>
+                    <td class="text-center entryDetailSum alert alert-success">100%</td>
                     <td class="text-center entryDetailSum">0</td>
                   </tr>
                   <tr>
@@ -259,7 +259,12 @@
                                     <% } %>
                                 </th>
                                 <td class="col-2"><%=moment(entry.createdIn).format("DD/MM/YYYY")%></td>
-                                <td class="col-5"><%=entry.description%></td>
+                                <td class="col-5">
+                                  <a name="<%=entry._id%>"></a>
+                                  <a href="#<%=entry._id%>" rel="tooltip" title="<%=entry.paymentMethod%>" class="linkGroup">
+                                    <%=entry.description%>
+                                  </a>
+                                </td>
                                 <td class="col-3"><%=numeral(entry.valueOf).format("$ 0,0.00")%></td>
                                 <td class="col td-actions text-center">
                                   <form action="/entry/<%=entry._id%>?_method=DELETE" method="POST">
@@ -289,7 +294,7 @@
                     <td class="text-center entryDetailSum">
                       <%=numeral(entries.filter((entry)=>entry.subgroup.group!=="fixa").reduce((prev, entry) => prev + entry.valueOf, 0)).format("$ 0,0.00") %>
                     </td>
-                    <td class="text-center entryDetailSum">100%</td>
+                    <td class="text-center entryDetailSum  alert alert-danger">101%</td>
                     <td class="text-center entryDetailSum">0</td>
                   </tr>
                   <tr>
@@ -324,7 +329,12 @@
                                     <% } %>
                                 </th>
                                 <td class="col-2"><%=moment(entry.createdIn).format("DD/MM/YYYY")%></td>
-                                <td class="col-5"><%=entry.description%></td>
+                                <td class="col-5">
+                                  <a name="<%=entry._id%>"></a>
+                                  <a href="#<%=entry._id%>" rel="tooltip" title="<%=entry.paymentMethod%>" class="linkGroup">
+                                    <%=entry.description%>
+                                  </a>
+                                </td>
                                 <td class="col-3"><%=numeral(entry.valueOf).  format("$ 0,0.00")%></td>
                                 <td class="col td-actions text-center">
                                   <form action="/entry/<%=entry._id%>?_method=DELETE" method="POST">

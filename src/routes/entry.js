@@ -2,15 +2,16 @@
 *	Page: /entry/*
 */
 
-let express 	= require("express"),
-	router 		= express.Router(),
-	middleware 	= require("../middlewares"),
-	{ PaymentMethods } = require('../models/entry'),
-	Entry 	= require("../models/entry"),
-	MonthConfig 	= require("../models/month-config"),
-	moment = require('moment'),
-	numeral = require('numeral'),
-	ptBr = require('numeral/locales/pt-br.js');
+let express 			= require("express"),
+	router 				= express.Router(),
+	middleware 			= require("../middlewares"),
+	{ PaymentMethods } 	= require('../models/entry'),
+	Entry 				= require("../models/entry"),
+	MonthConfig 		= require("../models/month-config"),
+	Subgroup 			= require("../models/subgroup"),
+	moment 				= require('moment'),
+	numeral 			= require('numeral'),
+	ptBr 				= require('numeral/locales/pt-br.js');
 
 	moment.locale('pt-br');
 	numeral.locale('pt-br');
@@ -25,86 +26,34 @@ router.use(function(req, res, next){
 
 // LIST
 router.get('/', middleware.isLoggedIn,function(req, res) {
+	let initialDate = moment().startOf('month').toDate();
+	let finalDate = moment().endOf('month').toDate();
 
-	let initialDate = moment().startOf('month').toDate();//moment.parse(moment.format(new Date(), '01-MM-YYYY'),'DD-MM-YYYY');
-
-	MonthConfig.findOne({"owner.username": req.user.username, dateSetup: { $eq: initialDate }})
-        .sort({description: 'asc'})
-        .exec(function(err, monthConfig){
+	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
+	.sort({createdIn: 'desc'})
+	.exec(function(err, entriesList){
+		MonthConfig.find({isDefined: true, dateSetup: { $gte: initialDate, $lte: finalDate }})
+		.exec(function(err, monthConfig){
 			if(err){
 				req.flash("error", err.message);
-            	console.log(err);
-			} else if (typeof monthConfig === 'undefined' || monthConfig === null){
-				//Não existe registro para essa lista
-				console.log("Sem mês vigente");
-				//Cria um novo setup para este mês com valores zerados
-				let newMonthConfig = {
-					owner: {
-				        id: req.user._id,
-				        username: req.user.username
-				    },
-				    balanceAccountBank: 0.0,
-				    balanceCreditCard: 0.0,
-				    dateSetup: initialDate
-				};
-				MonthConfig.create(newMonthConfig, function(err, savedMonthConfig){
-					if(err){
-						req.flash("error", err.message);
-		            	console.log(err);
-					}
-					return res.redirect("/entry");
-				});
+			}else if(monthConfig.length === 0){
+				res.render("entries",{entries: entriesList, error:"Por favor, configure seus saldos iniciais para este mês em 'Metas'"});
 			}else{
-				MonthConfig.find({"owner.username": req.user.username, dateSetup: { $lt: initialDate }})
-		        .sort({description: 'desc'})
-		        .exec(function(err, anotherMonths){
-		        	let initialDate = moment().startOf('month').toDate();
-					let finalDate = moment().endOf('month').toDate();
-
-		        	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
-				    .exec(function(err, entriesList){
-				        res.render("entries",{monthConfig: monthConfig, anotherMonths: anotherMonths, entries: entriesList});
-				    });
-				});
-       		}
+				//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
+				res.render("entries",{entries: entriesList});
+			}
+	    });
 	});
+
 });
 
 
 //CREATE ROUTE
 router.post("/", middleware.isLoggedIn, function(req, res){
 	
-	var detalheTransacao = JSON.parse(req.body.entry.description);
-	var tipoPagamento = PaymentMethods[req.body.entry.paymentMethod];
+	let entry = prepareEntryToSave(req.body.entry, req.user);
 
-	//console.log(detalheTransacao);
-	//var descricao = detalheTransacao.description;
-	//var codGrupo = detalheTransacao.codGrupo;
-	//var idSubgroup = detalheTransacao.id;
-
-	//var valorApontamento = numeral(req.body.entry.valueOf);
-	//Buscar do banco
-	//var valorPrevisto = valorApontamento;
-	//Realizar cálculo
-	//var situacao = 0;
-	req.body.entry.description = detalheTransacao.description;
-	req.body.entry.paymentMethod = PaymentMethods[req.body.entry.paymentMethod];
-	req.body.entry.typeOfEntry;
-	req.body.entry.createdIn = moment(req.body.entry.createdIn, 'DD/MM/YYYY').toDate();
-	req.body.entry.owner = {
-        id: req.user._id,
-        username: req.user.username
-    }
-    //VERIFICAR SE É ESSE MESMO
-    req.body.entry.subgroup = {
-    	id: detalheTransacao.id,
-    	group: detalheTransacao.group,
-    	description: detalheTransacao.descGrupo,
-    };
-
-    req.body.entry.valueOf = numeral(req.body.entry.valueOf).value();
-
-	Entry.create(req.body.entry, function(err, savedEntry){
+	Entry.create(entry, function(err, savedEntry){
 	 	if(err){
             req.flash("error", err.message);
             console.log(err);
@@ -118,23 +67,80 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 });
 
 
-router.get("/:entry_id/edit",  function(req, res) {
+router.get("/:entry_id/edit", middleware.checkOwnership, function(req, res) {
 	Entry.findById(req.params.entry_id, function(err, entry){
        if(err) {
            req.flash("error", err.message);
-            console.log(err);
-       }
-       res.render("entries/edit", {entry: entry});
+           console.log(err);
+           res.redirect("/entry");
+		}else{
+			Subgroup.findById(entry.subgroup.id, function(err, subgroup){
+				if(err) {
+		           req.flash("error", err.message);
+		           console.log(err);
+		           res.redirect("/entry");
+				}else{
+					//Campo temporário somente para renderizar
+					var descGrupo = subgroup.group==='fixa'?'Despesas Fixas':'Despesas Variáveis';
+                	var subtipo = subgroup.description;
+
+	                entry.txtDescricao = {
+						id: subgroup._id,
+	                    subtipo: subtipo,
+	                    description: subgroup.description,
+	                    descGrupo: descGrupo,
+	                    group: subgroup.group,
+	                    description_highlight: subgroup.description,
+	                    subtipo_highlight:subtipo
+	                };
+					
+					res.render("entries/edit", {entry: entry});
+				}
+			});
+		}
     });
-	//res.send("Editando :"+req.params.entry_id);
 });
 
-router.put("/:entry_id", function(req, res) {
-	console.log(req.body.entry);
-	console.log(Object.keys(PaymentMethods).find(key => PaymentMethods[key] === req.body.entry.paymentMethod));
-	res.send("Editando :"+req.body.entry);
+router.put("/:entry_id", middleware.checkOwnership, function(req, res) {
+	let entry = prepareEntryToSave(req.body.entry, req.user);
+	Entry.findOneAndUpdate({_id: req.params.entry_id},  {$set: entry},function(err, updatedSubgroup){
+		if(err) {
+			req.flash("error", err.message);
+			console.log(err);
+			res.redirect("/entry");
+		}else{
+			req.flash("success", "Registro atualizado com sucesso");
+            res.redirect("/entry");
+		}
+	});
 });
 
+
+function prepareEntryToSave(entry, user){
+	var detalheTransacao = JSON.parse(entry.description);
+	var tipoPagamento = PaymentMethods[entry.paymentMethod];
+
+	entry.description = detalheTransacao.description;
+	entry.paymentMethod = PaymentMethods[entry.paymentMethod];
+	entry.typeOfEntry;
+	entry.createdIn = moment(entry.createdIn, 'DD/MM/YYYY').toDate();
+	entry.owner = {
+        id: user._id,
+        username: user.username
+    }
+    //VERIFICAR SE É ESSE MESMO
+    entry.subgroup = {
+    	id: detalheTransacao.id,
+    	group: detalheTransacao.group,
+    	description: detalheTransacao.descGrupo,
+    };
+
+    entry.valueOf = numeral(entry.valueOf).value();
+
+    console.log(entry);
+
+    return entry;
+}
 
 router.get('/:year/:month/json', middleware.isLoggedIn, function(req, res) {
 
