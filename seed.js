@@ -17,11 +17,11 @@ let date1 = moment().startOf('month').toDate();//moment.parse(moment(now, '01-MM
 let date2 = moment().startOf('month').add(-1,'M').toDate();
 
 var subgroups = [
-{ group: 'fixa', description: "Moradia", 
+{ group: 'fixa', description: "Moradia", isFavorite: true,
     goals:[{
         date: date1,
         valueOfGoal: 1000.50
-    }] 
+   }] 
 },
 { group: 'fixa', description: "Cuidados Pessoais" },
 { group: 'fixa', description: "Empréstimo"},

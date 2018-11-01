@@ -77,7 +77,7 @@
         </div>
         <h4 class="card-title ">Metas</h4>
       </div>
-      <form action="/goal/<%=monthConfig.owner._id%>/<%=monthConfig.monthYear%>/edit?_method=PUT" method="POST">
+      <form action="/goal/<%=monthConfig.monthYear%>/edit?_method=PUT" method="POST">
 			<div class="card-body table-hover">
         <div class="table-responsive">
   				<table class="table">
@@ -108,7 +108,7 @@
                   <% }); %>
                 </td>
                 <td class="has-danger">
-                  <input type="hidden" name="subgroup[<%=idx%>][id]" value="<%=subgroup._id%>">
+                  <input type="hidden" name="subgroup[<%=idx%>][subgroupId]" value="<%=subgroup._id%>">
                   <div class="input-group input-group-sm">
                     <div class="input-group-prepend">
                       <span class="input-group-text">R$ </span>
@@ -122,12 +122,12 @@
                   </div>
                 </td>
                 <td class="td-actions text-center">
-                  <button type="button" rel="tooltip" class="btn btn-success">
+                  <button type="button" rel="tooltip" class="btn btn-success btn-save-goal" style="display: inline">
                     <i class="material-icons">save</i>
-                </button>
-                <button type="button" rel="tooltip" class="btn btn-outline btn-success">
-                    <i class="material-icons">star</i>
-                </button>
+                  </button>
+                  <button type="button" rel="tooltip" class="btn  btn-favorite-goal <%=subgroup.isFavorite?"btn-warning":"btn-outline"%> btn-success">
+                      <i class="material-icons">star</i>
+                  </button>
                 </td>
               </tr>
               <% });%>
