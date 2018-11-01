@@ -34,6 +34,7 @@ app.use(expressSanitizer());
 app.use(methodOverride('_method'));
 app.use(cookieParser('secret'));
 
+
 //seedDB.step1(); //seed the database
 //seedDB.step2(); //seed the database
 

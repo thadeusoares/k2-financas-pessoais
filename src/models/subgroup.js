@@ -1,5 +1,11 @@
 var mongoose = require("mongoose")
 
+const GoalSchema = new mongoose.Schema({
+    valueOfGoal: Number,
+    date: Date
+}, { _id: false });
+GoalSchema.index({ date: 1 });
+
 const SubgroupSchema = new mongoose.Schema({
 	group: {
 		type: String,
@@ -19,10 +25,11 @@ const SubgroupSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-    goals: [{
-        valueOfGoal: Number,
-        date: Date
-    }],
+    isFavorite: {
+        type: Boolean,
+        default: false
+    },
+    goals: [GoalSchema],
     owner: {
     	id: {
     		type: mongoose.Schema.Types.ObjectId,
@@ -36,6 +43,9 @@ const SubgroupSchema = new mongoose.Schema({
         default: true
     }
 });
+
+
+
 SubgroupSchema.index( { group: 1, description: 1, owner: 1}, { unique: true } );
 
 module.exports = mongoose.model("Subgroup",SubgroupSchema);

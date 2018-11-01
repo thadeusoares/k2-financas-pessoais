@@ -6,7 +6,6 @@ let express 	= require("express"),
 	router 		= express.Router(),
 	middleware 	= require("../middlewares"),
 	{ PaymentMethods } = require('../models/entry'),
-	Entry 	= require("../models/entry"),
 	MonthConfig 	= require("../models/month-config"),
 	Subgroup 	= require("../models/subgroup"),
 	moment = require('moment'),
@@ -26,7 +25,6 @@ router.use(function(req, res, next){
 
 // LIST
 router.get('/', middleware.isLoggedIn,function(req, res) {
-
 	let initialDate = moment().startOf('month').toDate();//moment.parse(moment.format(new Date(), '01-MM-YYYY'),'DD-MM-YYYY');
 
 	MonthConfig.findOne({"owner.username": req.user.username, dateSetup: { $eq: initialDate }})
@@ -48,6 +46,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 				    balanceCreditCard: 0.0,
 				    dateSetup: initialDate
 				};
+				console.log(newMonthConfig);
 				MonthConfig.create(newMonthConfig, function(err, savedMonthConfig){
 					if(err){
 						req.flash("error", err.message);
@@ -62,59 +61,54 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 		        	let initialDate = moment().startOf('month').toDate();
 					let finalDate = moment().endOf('month').toDate();
 
-		        	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
-				    .exec(function(err, entriesList){
-
-				    	//Recupera todos os subgrupos para atribuir metas
-					    Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true})
-					        .populate({path:'subgroupsInside', options: { sort: { 'description': 'asc' } }})
-					        .populate("goals")
-					        .sort({description: 'asc'})
-					        .exec(function(err, subgroupsList){
-					        	res.render("goals",{
-					            	monthConfig: monthConfig, 
-					            	anotherMonths: anotherMonths, 
-					            	entries: entriesList,
-					            	subgroups: subgroupsList
-					            });
-						});
-				    });
+			    	//Recupera todos os subgrupos para atribuir metas
+				    Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true})
+				    .sort({description: 'asc'})
+				    .exec(function(err, subgroupsTemp){
+				    	var opts = [
+						    { path: 'subgroupsInside', select: 'description', options: { sort: { 'description': 'asc' } } }
+						];
+				    	Subgroup.populate(subgroupsTemp, opts, function(err, subgroupsList){
+				        	res.render("goals",{
+					           	monthConfig: monthConfig, 
+					           	anotherMonths: anotherMonths, 
+					           	subgroups: subgroupsList
+					           });
+				        });
+					});
 				});
        		}
 	});
 });
-
 //Realiza a inclusão / atualizacao baseado em uma data
 router.put("/:month/:year/edit", middleware.isLoggedIn, function(req, res){
 	console.log(req.body.subgroup);
 	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
 
-	/*req.body.subgroup.forEach(function(goal){
-		console.log("#######################");
-		console.log("ID: "+ goal.id);
-		console.log("Valor: "+ numeral(goal.valueOfGoal).value());
-
-		Subgroup.findOne({"owner.username": req.user.username, _id:mongoose.Types.ObjectId(goal.id)}).exec(function(err, subgroup){
-			subgroup.goals.push({date: initialDate,valueOfGoal:numeral(goal.valueOfGoal).value()});
-			subgroup.save();
-		});
-	});
-	
-	req.flash("success", "Registros atualizados com sucesso");
-	res.redirect("/goal");
-	*/
-
 	async.series([
 		function(done){
-			async.each(req.body.subgroup, function(goal, callback){
+			async.each(req.body.subgroup, function(goalForm, callback){
 				console.log("#######################");
-				console.log("ID: "+ goal.id);
-				console.log("Valor: "+ numeral(goal.valueOfGoal).value());
+				console.log("ID: "+ goalForm.subgroupId);
+				console.log("Valor: "+ numeral(goalForm.valueOfGoal).value());
 				//PRECISO ENCONTRAR SOMENTE UM REGISTRO DE GOALS e removê-lo
-				Subgroup.findOne({"owner.username": req.user.username, _id:mongoose.Types.ObjectId(goal.id)}).
+				Subgroup.findOne({"owner.username": req.user.username, _id:mongoose.Types.ObjectId(goalForm.subgroupId)}).
 				exec(function(err, subgroup){
-					subgroup.goals.push({date: initialDate,valueOfGoal:numeral(goal.valueOfGoal).value()});
-					console.log(subgroup);
+					/*if(subgroup.goals === null){
+						subgroup.goals = [];
+					}*/
+					let foundIndex = subgroup.goals.findIndex(goal => moment(goal.date).isSame(initialDate));
+					let valueOfGoal = numeral(goalForm.valueOfGoal).value();
+
+					console.log("INDEX: "+foundIndex);
+					if(foundIndex !== -1){
+						subgroup.goals[foundIndex].valueOfGoal = valueOfGoal;
+					}else{
+						subgroup.goals.push({
+							date: initialDate,
+			        		valueOfGoal: valueOfGoal
+						});
+					}
 					subgroup.save(callback);
 				});
 			}, done);
@@ -126,5 +120,8 @@ router.put("/:month/:year/edit", middleware.isLoggedIn, function(req, res){
 
 });
 
+router.put("/:subgroup_id/:month/:year/edit", middleware.isLoggedIn, function(req, res){
+	res.send("Salvando!");
+});
 
 module.exports = router
