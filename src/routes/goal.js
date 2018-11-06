@@ -122,8 +122,10 @@ router.put("/:month/:year/edit", middleware.isLoggedIn, function(req, res){
 
 //update value of 
 router.put("/:subgroup_id/:month/:year/edit", middleware.checkOwnership, function(req, res){
-	let valueOfGoal = numeral(goalForm.valueOfGoal).value();
-	let dateOfGoal = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
+	let valueOfGoal = numeral(req.body.subgroup.valueOfGoal).value();
+	let dateOfGoal = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month');
+	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month');
+
 	Subgroup.findOne({_id: req.params.subgroup_id}, function(err, subgroup){
 		if(err){
 			req.flash("error", err.message);
@@ -139,11 +141,10 @@ router.put("/:subgroup_id/:month/:year/edit", middleware.checkOwnership, functio
 				});
 			}
 			subgroup.save();
-			req.flash("success", "Registros atualizados com sucesso");
+			req.flash("success", "O valor foi atribuido ao grupo!");
 			res.redirect("/goal");
 		}
 	});
-	res.send("Salvando valor de meta para este mês!");
 });
 
 //Update to favorite

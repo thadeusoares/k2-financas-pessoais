@@ -1,6 +1,6 @@
 /*
 *	Page: /entry/*
-*/
+*/	
 
 let express 			= require("express"),
 	router 				= express.Router(),
@@ -20,50 +20,15 @@ router.use(function(req, res, next){
    res.locals.moment = moment;
    res.locals.numeral = numeral;
    res.locals.paymentMethod = PaymentMethods;
-
    next();
 });
 
 // LIST
 router.get('/', middleware.isLoggedIn,function(req, res) {
-	let initialDate = moment().startOf('month').toDate();
-	let finalDate = moment().endOf('month').toDate();
-
-	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
-	.sort({createdIn: 'desc'})
-	.exec(function(err, entriesList){
-		MonthConfig.find({isDefined: true, dateSetup: { $gte: initialDate, $lte: finalDate }})
-		.exec(function(err, monthConfig){
-			if(err){
-				req.flash("error", err.message);
-			}else if(monthConfig.length === 0){
-				res.render("entries",{entries: entriesList, error:"Por favor, configure seus saldos iniciais para este mês em 'Metas'"});
-			}else{
-				//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
-				res.render("entries",{entries: entriesList});
-			}
-	    });
-	});
-
-});
-
-
-//CREATE ROUTE
-router.post("/", middleware.isLoggedIn, function(req, res){
-	
-	let entry = prepareEntryToSave(req.body.entry, req.user);
-
-	Entry.create(entry, function(err, savedEntry){
-	 	if(err){
-            req.flash("error", err.message);
-            console.log(err);
-        }else{
-            req.flash("success", "Apontamento registrado com sucesso");
-            console.log("Novo apontamento incluido");
-            console.log(savedEntry);
-        }
-        res.redirect("/entry");
-	});
+	/*let year = moment().format("YYYY");
+	let month = moment().format('MM');
+	res.redirect("/entry/"+ year + "/" + month);*/
+	return homeEntry(res); //res.redirect("/entry");
 });
 
 
@@ -74,6 +39,7 @@ router.get("/:entry_id/edit", middleware.checkOwnership, function(req, res) {
            console.log(err);
            res.redirect("/entry");
 		}else{
+
 			Subgroup.findById(entry.subgroup.id, function(err, subgroup){
 				if(err) {
 		           req.flash("error", err.message);
@@ -101,19 +67,158 @@ router.get("/:entry_id/edit", middleware.checkOwnership, function(req, res) {
     });
 });
 
+
+// LIST
+router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
+	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
+	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
+	
+	let calculoPercentual = function(){
+		return this.amountRealized / this.valueOfGoal ;
+	}
+
+	let aggregations = {
+		fixa: {
+			amountRealized: 0,
+			valueOfGoal: 0,
+			percentual: calculoPercentual
+		},
+		variavel: {
+			amountRealized: 0,
+			valueOfGoal: 0,
+			percentual: calculoPercentual
+		}
+	};
+
+	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
+	.sort({createdIn: 'desc'})
+	.exec(function(err, entriesList){
+		MonthConfig.find({isDefined: true, dateSetup: { $gte: initialDate, $lte: finalDate }})
+		.exec(function(err, monthConfig){
+			if(err){
+				req.flash("error", err.message);
+			}else if(monthConfig.length === 0){
+				res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month), error:"Por favor, configure seus saldos iniciais para este mês em 'Metas'"});
+			}else{
+				Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true}, 
+				function(errSubgroup, subgroups){
+					
+
+					if(err){
+						req.flash("error", err.message);
+					}else{
+						aggregations.fixa.amountRealized = entriesList.filter((entry)=>entry.subgroup.group==="fixa")
+								.reduce((prev, entry) => prev + entry.valueOf, 0);
+							
+						aggregations.variavel.amountRealized = entriesList.filter((entry)=>entry.subgroup.group!=="fixa")
+								.reduce((prev, entry) => prev + entry.valueOf, 0);
+						
+						subgroups.forEach(function(subgroup){
+							if(subgroup.group === "fixa"){
+								aggregations.fixa.valueOfGoal += subgroup.goals
+									.filter((goal)=>moment(goal.date).isSame(initialDate))
+										.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
+							}else{
+								aggregations.variavel.valueOfGoal += subgroup.goals
+									.filter((goal)=>moment(goal.date).isSame(initialDate))
+										.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
+							}
+						});
+					}
+					//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
+					res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month)});
+
+				});
+			}
+	    });
+	});
+});
+
+
+//CREATE ROUTE
+router.post("/", middleware.isLoggedIn, function(req, res){
+	
+	let entry = prepareEntryToSave(req.body.entry, req.user);
+
+	Entry.create(entry, function(err, savedEntry){
+	 	if(err){
+            req.flash("error", err.message);
+            console.log(err);
+        }else{
+            req.flash("success", "Apontamento registrado com sucesso");
+           // console.log("Novo apontamento incluido");
+           // console.log(savedEntry);
+        }
+        return homeEntry(res); //res.redirect("/entry");
+	});
+});
+
 router.put("/:entry_id", middleware.checkOwnership, function(req, res) {
 	let entry = prepareEntryToSave(req.body.entry, req.user);
 	Entry.findOneAndUpdate({_id: req.params.entry_id},  {$set: entry},function(err, updatedSubgroup){
 		if(err) {
 			req.flash("error", err.message);
 			console.log(err);
-			res.redirect("/entry");
 		}else{
 			req.flash("success", "Registro atualizado com sucesso");
-            res.redirect("/entry");
 		}
+		return homeEntry(res); //res.redirect("/entry");
 	});
 });
+
+router.get('/:year/:month/json', middleware.isLoggedIn, function(req, res) {
+
+	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
+	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
+
+	res.setHeader('Content-Type', 'application/json');
+    Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
+    .exec(function(err, entriesList){
+            res.send(JSON.stringify(entriesList));
+    });
+});
+
+router.delete("/:entry_id", middleware.checkOwnership, function(req, res) {
+	Entry.findByIdAndRemove(req.params.entry_id, function(err){
+       if(err) {
+           req.flash("error", err.message);
+            console.log(err);
+       }else{
+            req.flash("success", "Lançamento excluído com sucesso");
+       }
+       return homeEntry(res); //res.redirect("/entry");
+    });
+});
+
+function menuEntries(year, month) {
+	//Se o mês estiver a frente, não posso exibir
+	//Se for ano anterior completo sim
+	var months = [
+		{number: "01", name: "JAN", isSelected: false, year: year},
+		{number: "02", name: "FEV", isSelected: false, year: year},
+		{number: "03", name: "MAR", isSelected: false, year: year},
+		{number: "04", name: "ABR", isSelected: false, year: year},
+		{number: "05", name: "MAI", isSelected: false, year: year},
+		{number: "06", name: "JUN", isSelected: false, year: year},
+		{number: "07", name: "JUL", isSelected: false, year: year},
+		{number: "08", name: "AGO", isSelected: false, year: year},
+		{number: "09", name: "SET", isSelected: false, year: year},
+		{number: "10", name: "OUT", isSelected: false, year: year},
+		{number: "11", name: "NOV", isSelected: false, year: year},
+		{number: "12", name: "DEZ", isSelected: false, year: year}
+	];
+	months[month-1].isSelected = true;
+	return months;
+}
+
+function homeEntry(res){
+	//Preciso utilizar seção para retornar para a página correta
+	//Pois o ano pode ter mudado
+	//Talvez trazer dentro de ***res*** os valores de ano e mes
+	let year = moment().format("YYYY");
+	let month = moment().format('MM');
+    return res.redirect("/entry/"+year+"/"+month);
+}
 
 
 function prepareEntryToSave(entry, user){
@@ -137,33 +242,9 @@ function prepareEntryToSave(entry, user){
 
     entry.valueOf = numeral(entry.valueOf).value();
 
-    console.log(entry);
+    //console.log(entry);
 
     return entry;
 }
-
-router.get('/:year/:month/json', middleware.isLoggedIn, function(req, res) {
-
-	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
-	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
-
-	res.setHeader('Content-Type', 'application/json');
-    Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
-    .exec(function(err, entriesList){
-            res.send(JSON.stringify(entriesList));
-    });
-});
-
-router.delete("/:entry_id", middleware.checkOwnership, function(req, res) {
-	Entry.findByIdAndRemove(req.params.entry_id, function(err){
-       if(err) {
-           req.flash("error", err.message);
-            console.log(err);
-       }else{
-            req.flash("success", "Lançamento excluído com sucesso");
-       }
-       res.redirect("/entry");
-    });
-});
 
 module.exports = router

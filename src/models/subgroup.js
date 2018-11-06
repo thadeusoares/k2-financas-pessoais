@@ -44,8 +44,6 @@ const SubgroupSchema = new mongoose.Schema({
     }
 });
 
-
-
 SubgroupSchema.index( { group: 1, description: 1, owner: 1}, { unique: true } );
 
 module.exports = mongoose.model("Subgroup",SubgroupSchema);
