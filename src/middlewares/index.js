@@ -16,7 +16,8 @@ module.exports = {
 
     checkOwnership: function(req, res, next){
         if(req.isAuthenticated()){
-            if(res.locals.active === "subgroup"){
+            if(res.locals.active === "subgroup" || res.locals.active === "goal"){
+                console.log("Entrei aqui")
                 Subgroup.findById(req.params.subgroup_id, function(err, subgroup){
                     if(err){
                         console.log(err);
@@ -53,6 +54,7 @@ module.exports = {
                         res.redirect("back");
                     }else{
                         // dos user own the campground
+
                         if(entry.owner.id.equals(req.user._id)){
                             next();
                         } else{
