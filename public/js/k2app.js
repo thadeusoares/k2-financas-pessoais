@@ -403,18 +403,27 @@ $("form select[name='monthConfig[dateSetup]'").change(function(){
    k2App.fillEditMonthConfigForm($(this).val(), $(this).parents('form')); 
 });
 
+//Salva separado
 $(".btn-save-goal").on("click", function(){
   $(this).parents("tr").find(".has-danger").each(function(){
     var idSubGroup = $(this).find("input[type='hidden']").val();
     var valueOf = $(this).find("input[type='text']").val();
-    console.log(idSubGroup,valueOf);
+
+    var url = "/goal/" + idSubGroup + $("#formUpdateMonthConfig").attr("action").split("/goal")[1];
+    $("#formUpdateGoal").attr("action",url);
+    $("#formUpdateGoal input").attr("value",valueOf)
+    $("#formUpdateGoal").submit();
   });
 });
 
+//Salva favoritos
 $(".btn-favorite-goal").on("click", function(){
   $(this).parents("tr").find(".has-danger").each(function(){
     var idSubGroup = $(this).find("input[type='hidden']").val();
-    console.log(idSubGroup);
+    var url = "/goal/" + idSubGroup + $("#formUpdateMonthConfig").attr("action").split("/goal")[1];
+    url = url.replace("edit","favorite");
+    $("#formUpdateGoal").attr("action",url);
+    $("#formUpdateGoal").submit();
   });
 });
 

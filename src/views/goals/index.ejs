@@ -77,7 +77,7 @@
         </div>
         <h4 class="card-title ">Metas</h4>
       </div>
-      <form action="/goal/<%=monthConfig.monthYear%>/edit?_method=PUT" method="POST">
+      <form action="/goal/<%=monthConfig.monthYear%>/edit?_method=PUT" method="POST" id="formUpdateMonthConfig">
 			<div class="card-body table-hover">
         <div class="table-responsive">
   				<table class="table">
@@ -148,5 +148,9 @@
 
   </div>
 </div>
+
+<form action="/goal/<%=monthConfig.monthYear%>/edit?_method=PUT" method="POST" id="formUpdateGoal">
+  <input type="hidden" name="subgroup[valueOfGoal]">
+</form>
 
 <% include ../partials/footer %>      
