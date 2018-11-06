@@ -120,8 +120,45 @@ router.put("/:month/:year/edit", middleware.isLoggedIn, function(req, res){
 
 });
 
-router.put("/:subgroup_id/:month/:year/edit", middleware.isLoggedIn, function(req, res){
-	res.send("Salvando!");
+//update value of 
+router.put("/:subgroup_id/:month/:year/edit", middleware.checkOwnership, function(req, res){
+	let valueOfGoal = numeral(goalForm.valueOfGoal).value();
+	let dateOfGoal = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
+	Subgroup.findOne({_id: req.params.subgroup_id}, function(err, subgroup){
+		if(err){
+			req.flash("error", err.message);
+		   	console.log(err);
+		}else{
+			let foundIndex = subgroup.goals.findIndex(goal => dateOfGoal.isSame(initialDate));
+			if(foundIndex !== -1){
+				subgroup.goals[foundIndex].valueOfGoal = valueOfGoal;
+			}else{
+				subgroup.goals.push({
+					date: initialDate,
+					valueOfGoal: valueOfGoal
+				});
+			}
+			subgroup.save();
+			req.flash("success", "Registros atualizados com sucesso");
+			res.redirect("/goal");
+		}
+	});
+	res.send("Salvando valor de meta para este mês!");
+});
+
+//Update to favorite
+router.put("/:subgroup_id/:month/:year/favorite", middleware.checkOwnership, function(req, res){
+	Subgroup.findOne({_id: req.params.subgroup_id}, function(err, subgroup){
+		if(err){
+			req.flash("error", err.message);
+            console.log(err);
+		}else{
+			subgroup.isFavorite = !subgroup.isFavorite;
+			subgroup.save();
+			req.flash("success", "Registros atualizados com sucesso");
+		}
+		res.redirect("/goal");
+	});
 });
 
 module.exports = router
