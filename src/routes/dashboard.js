@@ -45,7 +45,6 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 	   	.where('subgroup.id').in(subgroups.map(ele => ele.id))
 	   	.sort({createdIn: 'desc'})
 		.exec(function(err, entriesList){
-			console.log("Qantidad"+entriesList.length)
 			//Recupera os somatórios
 			subgroups.forEach(function(subgroup){
 				subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroup(subgroup, entriesList, initialDate);
