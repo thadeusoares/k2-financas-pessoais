@@ -114,6 +114,7 @@ jQuery.fn.flexdatalist = function (_option, _value) {
         searchDisabled: false,
         searchDelay: 300,
         normalizeString: null,
+        removerAcentos: null,
         multiple: null,
         disabled: null,
         maxShownResults: 100,
@@ -1271,6 +1272,11 @@ jQuery.fn.flexdatalist = function (_option, _value) {
                     var text = splitted[index];
                     text = this.normalizeString(text),
                     keyword = this.normalizeString(keyword);
+
+                    /* THADEU SOARES */
+                    text = this.removerAcentos(text),
+                    keyword = this.removerAcentos(keyword);
+
                     if (options.searchEqual) {
                         return text == keyword;
                     }
@@ -1308,6 +1314,21 @@ jQuery.fn.flexdatalist = function (_option, _value) {
                         string = normalizeString(string);
                     }
                     return string.toUpperCase();
+                }
+                return string;
+            },
+         /**
+         * Replace all non english characters to appropriate character to perform the search/match.
+         */
+            removerAcentos: function (string) {
+                if (typeof string === 'string') {
+                    var removerAcentos = _this.options.get('removerAcentos');
+                    if (typeof removerAcentos === 'function') {
+                        string = removerAcentos(string);
+                    }
+                    var map={"â":"a","Â":"A","à":"a","À":"A","á":"a","Á":"A","ã":"a","Ã":"A","ê":"e","Ê":"E","è":"e","È":"E","é":"e","É":"E","î":"i","Î":"I","ì":"i","Ì":"I","í":"i","Í":"I","õ":"o","Õ":"O","ô":"o","Ô":"O","ò":"o","Ò":"O","ó":"o","Ó":"O","ü":"u","Ü":"U","û":"u","Û":"U","ú":"u","Ú":"U","ù":"u","Ù":"U","ç":"c","Ç":"C"};
+                    return string.replace(/[\W\[\] ]/g,function(a){return map[a]||a});
+                    //return string.toUpperCase();
                 }
                 return string;
             }
