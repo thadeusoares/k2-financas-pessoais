@@ -5,6 +5,7 @@
 let express 			= require("express"),
 	router 				= express.Router(),
 	middleware 			= require("../middlewares"),
+	entryGroups			= require("../controllers/entry-groups"),
 	{ PaymentMethods } 	= require('../models/entry'),
 	Entry 				= require("../models/entry"),
 	MonthConfig 		= require("../models/month-config"),
@@ -39,7 +40,6 @@ router.get("/:entry_id/edit", middleware.checkOwnership, function(req, res) {
            console.log(err);
            res.redirect("/entry");
 		}else{
-
 			Subgroup.findById(entry.subgroup.id, function(err, subgroup){
 				if(err) {
 		           req.flash("error", err.message);
@@ -59,7 +59,6 @@ router.get("/:entry_id/edit", middleware.checkOwnership, function(req, res) {
 	                    description_highlight: subgroup.description,
 	                    subtipo_highlight:subtipo
 	                };
-					
 					res.render("entries/edit", {entry: entry});
 				}
 			});
@@ -73,23 +72,6 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
 	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
 	
-	let calculoPercentual = function(){
-		return this.amountRealized / this.valueOfGoal ;
-	}
-
-	let aggregations = {
-		fixa: {
-			amountRealized: 0,
-			valueOfGoal: 0,
-			percentual: calculoPercentual
-		},
-		variavel: {
-			amountRealized: 0,
-			valueOfGoal: 0,
-			percentual: calculoPercentual
-		}
-	};
-
 	Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
 	.sort({createdIn: 'desc'})
 	.exec(function(err, entriesList){
@@ -98,36 +80,29 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 			if(err){
 				req.flash("error", err.message);
 			}else if(monthConfig.length === 0){
+				let aggregations = {
+					fixa: {
+						amountRealized: 0,
+						valueOfGoal: 0,
+						percentual: function(){}
+					},
+					variavel: {
+						amountRealized: 0,
+						valueOfGoal: 0,
+						percentual: function(){}
+					}
+				};
 				res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month), error:"Por favor, configure seus saldos iniciais para este mês em 'Metas'"});
 			}else{
 				Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true}, 
 				function(errSubgroup, subgroups){
-					
-
 					if(err){
 						req.flash("error", err.message);
 					}else{
-						aggregations.fixa.amountRealized = entriesList.filter((entry)=>entry.subgroup.group==="fixa")
-								.reduce((prev, entry) => prev + entry.valueOf, 0);
-							
-						aggregations.variavel.amountRealized = entriesList.filter((entry)=>entry.subgroup.group!=="fixa")
-								.reduce((prev, entry) => prev + entry.valueOf, 0);
-						
-						subgroups.forEach(function(subgroup){
-							if(subgroup.group === "fixa"){
-								aggregations.fixa.valueOfGoal += subgroup.goals
-									.filter((goal)=>moment(goal.date).isSame(initialDate))
-										.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
-							}else{
-								aggregations.variavel.valueOfGoal += subgroup.goals
-									.filter((goal)=>moment(goal.date).isSame(initialDate))
-										.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
-							}
-						});
+						aggregations = entryGroups.aggregations(subgroups, entriesList, initialDate);
 					}
 					//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
 					res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month)});
-
 				});
 			}
 	    });

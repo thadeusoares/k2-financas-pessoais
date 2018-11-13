@@ -45,6 +45,20 @@
                   <td class="td-actions text-center has-danger">100%</td>
                   <td class="has-danger">R$ 00,00</td>
                 </tr>
+                <% subgroups.forEach(function(subgroup){ %>
+                <tr>
+                  <td><%=subgroup.description%></td>
+                  <td><%=numeral(subgroup.goals[0].valueOfGoal).format("$ 0,0.00")%></td>
+                  <td>
+                    <%=numeral(subgroup.aggregationOfEntries.amountRealized).format("$ 0,0.00")%>
+                  </td>
+                  <td class="text-center alert alert-<%=subgroup.aggregationOfEntries.percentual()>1?"danger":"success"%>">
+                    <%=numeral(subgroup.aggregationOfEntries.percentual()).format("0.00 %") %>
+                  </td>
+                  <td>
+                    <%=numeral(subgroup.aggregationOfEntries.valueOfGoal).subtract(subgroup.aggregationOfEntries.amountRealized).format("$ 0,0.00") %>
+                  </td>
+                  <% }); %>
               </tbody>
             </table>
           </div>
