@@ -49,15 +49,8 @@ module.exports = {
 			valueOfGoal: 0,
 			percentual: calculoPercentual
 		};
-		//console.log("ID: "+subgroup._id + " | " + (typeof subgroup._id).constructor )
-		//console.log(subgroup._id.toString() )
-		entriesList.forEach(function(entry){
-			//console.log("-->" + entry.subgroup.id);
-			console.log("-->" + String(subgroup._id).trim() === String(entry.subgroup.id).trim());
-			//console.log((typeof entry.subgroup.id).constructor );
-		});
 		
-		aggregation.amountRealized = entriesList.filter((entry)=>entry.subgroup.id===subgroup._id).reduce((prev, entry) => prev + entry.valueOf, 0);
+		aggregation.amountRealized = entriesList.filter((entry)=>entry.subgroup.id.equals(subgroup._id)).reduce((prev, entry) => prev + entry.valueOf, 0);
 		aggregation.valueOfGoal += subgroup.goals.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
 		return aggregation;
     }

@@ -16,15 +16,15 @@
             <table class="table">
               <thead class="text-danger">
               <tr>
-                <th>Grupo</th>
+                <th>Item</th>
                 <th>Previsto</th>
                 <th>Realizado</th>
                 <th class="text-center">Percentual</th>
-                <th>Saldo</th>
+                <th class="text-center">Saldo</th>
               </tr>
               </thead>
               <tbody>
-                <tr>
+                <!-- tr>
                   <td>Cuidados Pessoais</td>
                   <td class="has-danger">R$ 10.000,00</td>
                   <td class="has-danger">R$ 10.000,00</td>
@@ -44,7 +44,7 @@
                   <td class="has-danger">R$ 10.000,00</td>
                   <td class="td-actions text-center has-danger">100%</td>
                   <td class="has-danger">R$ 00,00</td>
-                </tr>
+                </tr -->
                 <% subgroups.forEach(function(subgroup){ %>
                 <tr>
                   <td><%=subgroup.description%></td>
@@ -55,7 +55,7 @@
                   <td class="text-center alert alert-<%=subgroup.aggregationOfEntries.percentual()>1?"danger":"success"%>">
                     <%=numeral(subgroup.aggregationOfEntries.percentual()).format("0.00 %") %>
                   </td>
-                  <td>
+                  <td class="text-center alert alert-<%=subgroup.aggregationOfEntries.percentual()>1?"danger":"success"%>">
                     <%=numeral(subgroup.aggregationOfEntries.valueOfGoal).subtract(subgroup.aggregationOfEntries.amountRealized).format("$ 0,0.00") %>
                   </td>
                   <% }); %>
@@ -67,7 +67,58 @@
     </div>
   <!-- END OF SUBGROUPS LIST -->
   </div>
-
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card card-chart">
+          <div class="card-header card-header-icon card-header-danger">
+            <div class="card-icon">
+              <i class="material-icons">pie_chart</i>
+            </div>
+            <h4 class="card-title">Despesas Variáveis</h4>
+          </div>
+          <div class="card-body">
+            <div id="chartEntriesByGroupVariavel" class="ct-chart"></div>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-md-12">
+                <h6 class="card-category">Legenda</h6>
+              </div>
+              <div class="col-md-12">
+                <i class="fa fa-circle text-danger"></i> Realizado
+                <i class="fa fa-circle text-info"></i> Saldo
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-chart">
+          <div class="card-header card-header-icon card-header-warning">
+            <div class="card-icon">
+              <i class="material-icons">pie_chart</i>
+            </div>
+            <h4 class="card-title">Despesas Fixas</h4>
+          </div>
+          <div class="card-body">
+            <div id="chartEntriesByGroupFixa" class="ct-chart"></div>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-md-12">
+                <h6 class="card-category">Legenda</h6>
+              </div>
+              <div class="col-md-12">
+                <i class="fa fa-circle text-danger"></i> Realizado
+                <i class="fa fa-circle text-info"></i> Saldo
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
  <!-- 
   <div class="container-fluid">
     <div class="row">

@@ -1,36 +1,72 @@
 k2App = {
  
 initDashboardPageCharts: function() {
-   if ($('#dailySalesChart').length != 0 || $('#completedTasksChart').length != 0 || $('#chartEntriesByGroup').length != 0) {
+   if ($('#dailySalesChart').length != 0 || $('#completedTasksChart').length != 0 || $('#chartEntriesByGroupVariavel').length != 0 || $('#chartEntriesByGroupFixa').length != 0) {
 
-    /* ############## DESPESAS ################ */
+    /* ############## DESPESAS ################ 
     var dataPreferences = {
       labels: ['60%', '16%', '16%', '6%', '2%'],
       series: [60, 16, 16, 6, 2]
     };
-
     var dataPreferences = {
       //Construir lógica para escolher as cores depois
       series: [{
         value: 80,
         name: "80%",
         className: "barra1",
-        meta: "Meta 100",
+        meta: "Meta 80",
       },{
         value: 20,
         name: "20%",
         className: "barra2",
-        meta: "Meta 100",
+        meta: "Meta 20",
       }],
       
     };
+*/
 
-    var optionsPreferences = {
-      height: '230px'
-    };
+    var jsonData = $.ajax({
+        url: 'http://localhost:8080/entry/2018/11/agg/json',
+        dataType: 'json',
+      }).done(function (result) {
+        // #############DESPESAS VARIAVEIS ############
+        dataPreferencesVariavel = {
+          series: [
+            { value: result.variavel.amountRealized,  className: "barra1" },
+            { value: (result.variavel.valueOfGoal-result.variavel.amountRealized), className: "barra2" }
+          ]
+        };
 
-    var entriesByGroupChart = Chartist.Pie('#chartEntriesByGroup', dataPreferences, optionsPreferences);
-    md.startAnimationForLineChart(entriesByGroupChart);
+        var optionsPreferencesVariavel = {
+          height: '230px',
+          labelInterpolationFnc: function(value) {
+            return Math.round(value / result.variavel.valueOfGoal * 100) + '%';
+          }
+        };
+
+        dataPreferencesFixa = {
+          series: [
+            { value: result.fixa.amountRealized,  className: "barra2" },
+            { value: (result.fixa.valueOfGoal-result.fixa.amountRealized), className: "barra1" }
+          ]
+        };
+
+        var optionsPreferencesFixa = {
+          height: '230px',
+          labelInterpolationFnc: function(value) {
+            return Math.round(value / result.fixa.valueOfGoal * 100) + '%';
+          }
+        };
+
+        var chartEntriesByGroupVariavel = Chartist.Pie('#chartEntriesByGroupVariavel', dataPreferencesVariavel, optionsPreferencesVariavel);
+        md.startAnimationForLineChart(chartEntriesByGroupVariavel);
+
+        var chartEntriesByGroupFixa = Chartist.Pie('#chartEntriesByGroupFixa', dataPreferencesFixa, optionsPreferencesFixa);
+        md.startAnimationForLineChart(chartEntriesByGroupFixa);
+
+    });
+
+    
 
     
 
@@ -369,9 +405,10 @@ $('#txtDescricao').flexdatalist({
      groupBy: 'descGrupo',
      visibleProperties: ["description","descGrupo","subtipo"],
      searchIn: ["description","descGrupo","subtipo"],
+     normalizeString: true,
      url: '/subgroup/groups/json',
+     removerAcentos: true,
      noResultsText: 'É necessário <a href="/subgroup">incluir</a> esse grupo/subrupo'
-     
 });
 
 $('#txtDescricao').on('after:flexdatalist.search', function(event, keyword, data, matchedItems) {
