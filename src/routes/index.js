@@ -13,7 +13,7 @@ router.get("/", middleware.isLoggedIn, function(req, res){
 
 //show register form
 router.get("/register", function(req, res){
-	res.render("register");
+	res.render("registries");
 });
 
 //handle sign up logic
