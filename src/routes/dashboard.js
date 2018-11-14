@@ -56,6 +56,8 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 			   	.sort({createdIn: 'desc'})
 				.exec(function(err, entriesList){
 					if(err){
+						console.log("##########=>ERRO: ");
+						console.log(err);
 						res.render("home/erro",{ error: err});
 					}else{
 						console.log("##########=>entriesList: ");
