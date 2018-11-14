@@ -62,8 +62,9 @@ module.exports = {
 			valueOfGoal: 0,
 			percentual: calculoPercentual
 		};
-		
-		aggregation.amountRealized = entriesList.reduce((prev, entry) => prev + entry.valueOf, 0);
+		if(typeof entriesList !== undefined && entriesList.length > 0){
+			aggregation.amountRealized = entriesList.reduce((prev, entry) => prev + entry.valueOf, 0);
+		}
 		aggregation.valueOfGoal += subgroup.goals.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
 		return aggregation;
     }
