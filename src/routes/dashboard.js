@@ -55,6 +55,8 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 			   	.where('subgroup.id').in([subgroup._id, subgroup.subgroupsInside.map(ele => ele._id)])
 			   	.sort({createdIn: 'desc'})
 				.exec(function(err, entriesList){
+					console.log("##########=>entriesList: ");
+					console.log(entriesList);
 					//Recupera os somatórios
 					subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, entriesList, initialDate);
 					subGroupsAgg.push(subgroup);
