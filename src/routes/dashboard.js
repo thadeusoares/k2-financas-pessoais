@@ -10,6 +10,7 @@ let express 	= require("express"),
 	Subgroup 	= require("../models/subgroup"),
 	moment = require('moment'),
 	numeral = require('numeral'),
+	async = require('async'),
 	ptBr = require('numeral/locales/pt-br.js'),
 	{ Query } = mongoose = require("mongoose");
 
@@ -34,24 +35,35 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 	     isFavorite: true,
 	     'goals.date': { $eq: initialDate },
 	     goals: { $elemMatch: { date: { $eq: initialDate} } } 
-	}).sort({description: 'asc'})
+	})
+	.populate({ path: 'subgroupsInside', select: '_id' })
+	.sort({description: 'asc'})
     .exec(function(err, subgroups){
-    	//Recupera todas as Entries que foram criadas no mês vigente
-    	//Filtra somente aquelas referentes aos ids dos grupos
-	   	Entry.find({
-	   		"owner.username": req.user.username,
-	   		createdIn: { $gte: initialDate, $lte: finalDate }
-	   	})
-	   	.where('subgroup.id').in(subgroups.map(ele => ele.id))
-	   	.sort({createdIn: 'desc'})
-		.exec(function(err, entriesList){
-			//Recupera os somatórios
-			subgroups.forEach(function(subgroup){
-				subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroup(subgroup, entriesList, initialDate);
-			});
-	    	
-	    	res.render("index_dashboard",{ subgroups: subgroups });
-    	});
+    	if(err || subgroups.length === 0){
+    		res.render("home/erro",{ error: err || "Não existem favoritos"});
+    	}else{
+	    	//Recupera todas as Entries que foram criadas no mês vigente
+	    	//Filtra somente aquelas referentes aos ids dos grupos ou seus filhos
+			//REALIZAR REFACTORY, ESSE CÓDIGO ESTÁ MUITO SENSÍVEL			
+			let subGroupsAgg = [];
+			 for(let i=0; i < subgroups.length; i++) {
+			 	let subgroup = subgroups[i];
+				Entry.find({
+			   		"owner.username": req.user.username,
+			   		createdIn: { $gte: initialDate, $lte: finalDate }
+			   	})
+			   	.where('subgroup.id').in([subgroup._id, subgroup.subgroupsInside.map(ele => ele._id)])
+			   	.sort({createdIn: 'desc'})
+				.exec(function(err, entriesList){
+					//Recupera os somatórios
+					subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, entriesList, initialDate);
+					subGroupsAgg.push(subgroup);
+					if(i+1 === subgroups.length){
+						res.render("home/dashboard",{ subgroups: subGroupsAgg });
+					}
+		    	});
+			}
+    	}
 	});
 
 })

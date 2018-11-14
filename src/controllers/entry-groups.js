@@ -53,5 +53,18 @@ module.exports = {
 		aggregation.amountRealized = entriesList.filter((entry)=>entry.subgroup.id.equals(subgroup._id)).reduce((prev, entry) => prev + entry.valueOf, 0);
 		aggregation.valueOfGoal += subgroup.goals.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
 		return aggregation;
+    },
+    //Refatorar esse método depois
+    aggregationBySubgroupOwner: function(subgroup, entriesList, initialDate){
+		let calculoPercentual = function(){ return this.amountRealized / this.valueOfGoal};
+		let aggregation = {
+			amountRealized: 0,
+			valueOfGoal: 0,
+			percentual: calculoPercentual
+		};
+		
+		aggregation.amountRealized = entriesList.reduce((prev, entry) => prev + entry.valueOf, 0);
+		aggregation.valueOfGoal += subgroup.goals.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
+		return aggregation;
     }
 }
