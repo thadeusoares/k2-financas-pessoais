@@ -21,7 +21,8 @@ seedDB      		= require("./seed"),
 expressSanitizer  = require("express-sanitizer");
 
 //connect to database
-mongoose.connect("mongodb://localhost:27017/k2app", { useNewUrlParser: true });
+var url = process.env.DATABASEURL || "mongodb://localhost:27017/k2app";
+mongoose.connect(url, { useNewUrlParser: true });
 
 // view engine setup
 app.set("view engine", "ejs");
