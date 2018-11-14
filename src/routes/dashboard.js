@@ -46,13 +46,15 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 	    	//Filtra somente aquelas referentes aos ids dos grupos ou seus filhos
 			//REALIZAR REFACTORY, ESSE CÓDIGO ESTÁ MUITO SENSÍVEL			
 			let subGroupsAgg = [];
-			 for(let i=0; i < subgroups.length; i++) {
+			for(let i=0; i < subgroups.length; i++) {
 			 	let subgroup = subgroups[i];
+			 	let arrayOfSubgroupsId = [subgroup._id, subgroup.subgroupsInside.map(ele => ele._id)];
 				Entry.find({
 			   		"owner.username": req.user.username,
-			   		createdIn: { $gte: initialDate, $lte: finalDate }
+			   		createdIn: { $gte: initialDate, $lte: finalDate },
+			   		"subgroup.id": { $in: arrayOfSubgroupsId }
 			   	})
-			   	.where('subgroup.id').in([subgroup._id, subgroup.subgroupsInside.map(ele => ele._id)])
+			   	//.where('subgroup.id').in()
 			   	.sort({createdIn: 'desc'})
 				.exec(function(err, entriesList){
 					if(err){
