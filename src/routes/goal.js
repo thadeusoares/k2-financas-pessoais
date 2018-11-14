@@ -123,7 +123,7 @@ router.put("/:month/:year/edit", middleware.isLoggedIn, function(req, res){
 //update value of 
 router.put("/:subgroup_id/:month/:year/edit", middleware.checkOwnership, function(req, res){
 	let valueOfGoal = numeral(req.body.subgroup.valueOfGoal).value();
-	let dateOfGoal = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month');
+	//let dateOfGoal = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month');
 	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month');
 
 	Subgroup.findOne({_id: req.params.subgroup_id}, function(err, subgroup){
@@ -131,7 +131,7 @@ router.put("/:subgroup_id/:month/:year/edit", middleware.checkOwnership, functio
 			req.flash("error", err.message);
 		   	console.log(err);
 		}else{
-			let foundIndex = subgroup.goals.findIndex(goal => dateOfGoal.isSame(initialDate));
+			let foundIndex = subgroup.goals.findIndex(goal => moment(goal.date).isSame(initialDate));
 			if(foundIndex !== -1){
 				subgroup.goals[foundIndex].valueOfGoal = valueOfGoal;
 			}else{
