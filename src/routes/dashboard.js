@@ -11,8 +11,8 @@ let express 	= require("express"),
 	moment = require('moment'),
 	numeral = require('numeral'),
 	async = require('async'),
-	ptBr = require('numeral/locales/pt-br.js'),
-	{ Query } = mongoose = require("mongoose");
+	mongoose = require('mongoose')
+	ptBr = require('numeral/locales/pt-br.js');
 
 moment.locale('pt-br');
 numeral.locale('pt-br');
@@ -48,7 +48,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 			let subGroupsAgg = [];
 			for(let i=0; i < subgroups.length; i++) {
 			 	let subgroup = subgroups[i];
-			 	let arrayOfSubgroupsId = [subgroup._id, subgroup.subgroupsInside.map(ele => ele._id)];
+			 	let arrayOfSubgroupsId = [mongoose.Types.ObjectId(subgroup._id), subgroup.subgroupsInside.map(ele => mongoose.Types.ObjectId(ele._id))];
 				Entry.find({
 			   		"owner.username": req.user.username,
 			   		createdIn: { $gte: initialDate, $lte: finalDate },
