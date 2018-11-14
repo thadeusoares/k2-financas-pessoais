@@ -56,7 +56,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 			   	.sort({createdIn: 'desc'})
 				.exec(function(err, entriesList){
 					//Recupera os somatórios
-					subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, null, initialDate);
+					subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, entriesList, initialDate);
 					subGroupsAgg.push(subgroup);
 					if(i+1 === subgroups.length){
 						res.render("home/dashboard",{ subgroups: subGroupsAgg });
