@@ -11,7 +11,7 @@ let express 	= require("express"),
 	moment = require('moment'),
 	numeral = require('numeral'),
 	async = require('async'),
-	mongoose = require('mongoose')
+	mongoose = require('mongoose'),
 	ptBr = require('numeral/locales/pt-br.js');
 
 moment.locale('pt-br');
@@ -48,7 +48,12 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 			let subGroupsAgg = [];
 			for(let i=0; i < subgroups.length; i++) {
 			 	let subgroup = subgroups[i];
-			 	let arrayOfSubgroupsId = [mongoose.Types.ObjectId(subgroup._id), subgroup.subgroupsInside.map(ele => mongoose.Types.ObjectId(ele._id))];
+
+			 	let arrayOfSubgroupsId = subgroup.subgroupsInside.map(ele => ele._id);
+				arrayOfSubgroupsId.push(subgroup._id);
+			 	
+			 	
+			 	console.log(arrayOfSubgroupsId);
 				Entry.find({
 			   		"owner.username": req.user.username,
 			   		createdIn: { $gte: initialDate, $lte: finalDate },
@@ -62,8 +67,8 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 						console.log(err);
 						res.render("home/erro",{ error: err});
 					}else{
-						console.log("##########=>entriesList: ");
-						console.log(entriesList);
+						/*console.log("##########=>entriesList: ");
+						console.log(entriesList);*/
 						//Recupera os somatórios
 						subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, entriesList, initialDate);
 						subGroupsAgg.push(subgroup);
