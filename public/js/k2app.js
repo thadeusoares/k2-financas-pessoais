@@ -26,7 +26,7 @@ initDashboardPageCharts: function() {
 */
 
     var jsonData = $.ajax({
-        url: 'http://localhost:8080/entry/2018/11/agg/json',
+        url: '/entry/2018/11/agg/json',
         dataType: 'json',
       }).done(function (result) {
         // #############DESPESAS VARIAVEIS ############
