@@ -201,3 +201,15 @@ a.linkGroup:focus, a.linkGroup:hover {
   height: calc(100vh - 70px);
   margin-top: 70px;
 }
+
+@media (max-width: 480px) {
+  .login-k2 {
+    padding-top: 70px !important
+  }
+}
+
+@media (max-width: 991px) {
+  .login-k2 {
+    padding-top: 70px !important
+  }
+}
