@@ -109,24 +109,3 @@
   </div>
 </div>
 <% include ../../partials/footer %>
-<script type="text/javascript">
-$(document).ready(function() {
-  //PRECISO RECEBER O OBJETO COM TODOS ESTES DADOS E PREENCHER O FLEXLIST
-  $('#txtDescricao').flexdatalist({
-     searchContain: true,
-     textProperty: '{description} / {subtipo} / {descGrupo}',
-     valueProperty: '*',
-     minLength: 1,
-     focusFirstResult: true,
-     selectionRequired: true,
-     searchDelay: 300,
-     groupBy: 'descGrupo',
-     visibleProperties: ["description","descGrupo","subtipo"],
-     searchIn: ["description","descGrupo","subtipo"],
-     normalizeString: true,
-     url: '/subgroup/groups/json',
-     removerAcentos: true,
-     noResultsText: 'É necessário <a href="/subgroup">incluir</a> esse grupo/subrupo'
-});
-});
-</script>

@@ -365,7 +365,8 @@ $(".btn-edit-subgroup").on("click", function(){
 // Entries
 //###########################
 
-$('.setup-month-icon').on('click', function () {
+$(document).ready(function() {
+  $('.setup-month-icon').on('click', function () {
   $("#setupMonth").collapse('show');
   $(this).hide(200);
 });
@@ -471,8 +472,6 @@ $(".btn-favorite-goal").on("click", function(){
 
 $(".money").maskMoney({prefix:' ', allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
 
-
-$(document).ready(function() {
   $(window).keydown(function(event){
     if( (event.keyCode == 13) /*&& (validationFunction() == false)*/ ) {
       event.preventDefault();
