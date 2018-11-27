@@ -18,7 +18,8 @@ User        		= require("./src/models/user"),
 app 				= express(),
 methodOverride 		= require("method-override"),
 seedDB      		= require("./seed"),
-expressSanitizer  = require("express-sanitizer");
+expressSanitizer  = require("express-sanitizer"),
+device = require('express-device');
 
 //connect to database
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/k2app";
@@ -34,7 +35,12 @@ app.use('/static', express.static('./node_modules/@fortawesome'))
 app.use(expressSanitizer());
 app.use(methodOverride('_method'));
 app.use(cookieParser('secret'));
+app.use(device.capture());
 
+
+//Configura a validação de devices
+device.enableDeviceHelpers(app);
+//device.enableViewRouting(app);
 
 //seedDB.step1(); //seed the database
 //seedDB.step2(); //seed the database

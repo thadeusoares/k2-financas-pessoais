@@ -70,6 +70,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 						];
 				    	Subgroup.populate(subgroupsTemp, opts, function(err, subgroupsList){
 				        	res.render("goals",{
+				        		ignoreViewRouting: true,
 					           	monthConfig: monthConfig, 
 					           	anotherMonths: anotherMonths, 
 					           	subgroups: subgroupsList

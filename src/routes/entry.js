@@ -26,9 +26,6 @@ router.use(function(req, res, next){
 
 // LIST
 router.get('/', middleware.isLoggedIn,function(req, res) {
-	/*let year = moment().format("YYYY");
-	let month = moment().format('MM');
-	res.redirect("/entry/"+ year + "/" + month);*/
 	return homeEntry(res); //res.redirect("/entry");
 });
 
@@ -59,7 +56,11 @@ router.get("/:entry_id/edit", middleware.checkOwnership, function(req, res) {
 	                    description_highlight: subgroup.description,
 	                    subtipo_highlight:subtipo
 	                };
-					res.render("entries/edit", {entry: entry});
+	                if(res.locals.is_desktop){
+						res.render("entries/edit", {entry: entry});
+					} else {
+						res.render("entries/mobile/edit", {entry: entry});
+					}
 				}
 			});
 		}
@@ -85,8 +86,6 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 		    	$group: { _id: {$dateToString: { format: "%m", date: "$createdIn"}} }
 			}]).exec(function(err, meses){
 				let ultimoMes = meses.map( no => no._id).slice(-1);
-				//res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes)});						
-
 				if(err){
 					req.flash("error", err.message);
 				}else if(monthConfig.length === 0){
@@ -102,7 +101,11 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 							percentual: function(){}
 						}
 					};
-					res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes), error:"Por favor, configure seus saldos iniciais para este mês em 'Metas'"});
+					if(res.locals.is_desktop){
+						res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes), error:"Por favor, configure seus saldos iniciais para este mês em 'Metas'"});
+					}else{
+						res.render("entries/mobile",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes), error:"Por favor, configure seus saldos iniciais para este mês em 'Metas'"});
+					}					
 				}else{
 					Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true}, 
 					function(errSubgroup, subgroups){
@@ -112,7 +115,11 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 							aggregations = entryGroups.aggregations(subgroups, entriesList, initialDate);
 						}
 						//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
-						res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes)});						
+						if(res.locals.is_desktop){
+							res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes)});						
+						}else{
+							res.render("entries/mobile",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes)});						
+						}
 					});
 				}
 			});
