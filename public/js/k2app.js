@@ -167,7 +167,7 @@ $("#formInsert input[name='typeofGroup']").change(changeTypeOfGroup);
 $("#formUpdate input[name='typeofGroup']").change(changeTypeOfGroup);
 
 //$(".groupType").change(function(){  
-$("form select[name='subgroup[group]'").change(function(){  
+$(".subgroup-group").change(function(){  
    k2App.fillParentGroupList($(this).val(), $(this).parents('form')); 
 });
 
@@ -252,7 +252,7 @@ $(document).ready(function() {
     }
   });
 
-  $("form select[name='monthConfig[dateSetup]'").change(function(){  
+  $("#month-config-datesetup").change(function(){  
      k2App.fillEditMonthConfigForm($(this).val(), $(this).parents('form')); 
   });
 

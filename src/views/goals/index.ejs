@@ -17,14 +17,14 @@
             <div class="collapse <%=monthConfig.isDefined?"hidden":"show"%>" id="setupMonth">
               <div class="row">
                 <div class="col-md-3 form-group bmd-form-group">
-                  <label for="inputGroupSelect04" class="bmd-label-static" style="margin-left: 15px">Escolha um mês</label>
+                  <label for="month-config-datesetup" class="bmd-label-static" style="margin-left: 15px">Escolha um mês</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text">
                         <i class="fa fa-calendar"></i>
                       </span>
                     </div>
-                    <select class="form-control" id="inputGroupSelect04" name="monthConfig[dateSetup]" >
+                    <select class="form-control" id="month-config-datesetup" name="monthConfig[dateSetup]" >
                       <option value="<%=monthConfig._id%>"><%=monthConfig.monthYearLabel%></option>
                       <%  anotherMonths.forEach(function(month) { %>
                           <option value="<%=month._id%>"><%=month.monthYearLabel%></option>
