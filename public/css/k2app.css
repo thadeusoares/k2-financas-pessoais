@@ -59,6 +59,10 @@ a.linkGroup:focus, a.linkGroup:hover {
   font-weight: bold !important;
 }
 
+.destaque.alert.alert-danger:hover > td{
+  color: #f55145;
+}
+
 #subgroupsGoals {
   position: relative;
   height: 400px;
