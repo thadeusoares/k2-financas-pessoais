@@ -48,38 +48,39 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 		    	//Filtra somente aquelas referentes aos ids dos grupos ou seus filhos
 				//REALIZAR REFACTORY, ESSE CÓDIGO ESTÁ MUITO SENSÍVEL			
 				let subGroupsAgg = [];
-				for(let i=0; i < subgroups.length; i++) {
-				 	let subgroup = subgroups[i];
-
-				 	let arrayOfSubgroupsId = subgroup.subgroupsInside.map(ele => ele._id);
+				let arrayOfSubgroupsId = [];
+				subgroups.forEach(function(subgroup){
 					arrayOfSubgroupsId.push(subgroup._id);
-				 	
-				 	
-				 	//console.log(arrayOfSubgroupsId);
-					Entry.find({
-				   		"owner.username": req.user.username,
-				   		createdIn: { $gte: initialDate, $lte: finalDate },
-				   		"subgroup.id": { $in: arrayOfSubgroupsId }
-				   	})
-				   	//.where('subgroup.id').in()
-				   	.sort({createdIn: 'desc'})
-					.exec(function(err, entriesList){
-						if(err){
-							console.log("##########=>ERRO: ");
-							console.log(err);
-							res.render("home/erro",{ error: err});
-						}else{
-							/*console.log("##########=>entriesList: ");
-							console.log(entriesList);*/
-							//Recupera os somatórios
-							subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, entriesList, initialDate);
+					arrayOfSubgroupsId = arrayOfSubgroupsId.concat(subgroup.subgroupsInside.map(ele => ele._id));
+				});
+				Entry.find({
+			   		"owner.username": req.user.username,
+			   		createdIn: { $gte: initialDate, $lte: finalDate },
+			   		"subgroup.id": { $in: arrayOfSubgroupsId }
+			   	})
+			   	.sort({createdIn: 'desc'})
+				.exec(function(err, entriesList){
+					if(err){
+						console.log("##########=>ERRO: ");
+						console.log(err);
+						res.render("home/erro",{ error: err});
+					}else{
+						//Recupera os somatórios
+						subgroups.forEach(function(subgroup){
+							let arrayIds =[subgroup._id];
+							arrayIds = arrayIds.concat(subgroup.subgroupsInside.map(ele => ele._id));
+							let dados = entriesList.filter(function(entry){
+								return arrayIds.filter(function(id){
+									return entry.subgroup.id.equals(id);
+								}).length !== 0
+							});
+
+							subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, dados, initialDate);
 							subGroupsAgg.push(subgroup);
-							if(i+1 === subgroups.length){
-								res.render("home/dashboard",{ ignoreViewRouting: true, subgroups: subGroupsAgg });
-							}
-						}
-			    	});
-				}
+						});
+						res.render("home/dashboard",{ ignoreViewRouting: true, subgroups: subGroupsAgg });
+					}
+		    	});
 	    	}
 		});
 	}else{
