@@ -55,7 +55,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 					arrayOfSubgroupsId.push(subgroup._id);
 				 	
 				 	
-				 	console.log(arrayOfSubgroupsId);
+				 	//console.log(arrayOfSubgroupsId);
 					Entry.find({
 				   		"owner.username": req.user.username,
 				   		createdIn: { $gte: initialDate, $lte: finalDate },
