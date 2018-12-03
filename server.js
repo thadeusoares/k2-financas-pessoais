@@ -64,6 +64,7 @@ app.use(function(req, res, next){
    res.locals.currentUser = req.user;
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
+   res.locals.info = req.flash('info');
    res.locals.active = req.path.split('/')[1];
    next();
 });

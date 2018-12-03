@@ -4,7 +4,7 @@ initDashboardPageCharts: function() {
    if ($('#chartEntriesByGroupVariavel').length != 0 || $('#chartEntriesByGroupFixa').length != 0) {
 
     var jsonData = $.ajax({
-        url: '/entry/2018/11/agg/json',
+        url: '/entry/'+$.datepicker.formatDate('yy', new Date())+'/'+$.datepicker.formatDate('mm', new Date())+'/agg/json',
         dataType: 'json',
       }).done(function (result) {
         // #############DESPESAS VARIAVEIS ############
