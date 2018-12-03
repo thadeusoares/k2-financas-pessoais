@@ -28,7 +28,6 @@ router.use(function(req, res, next){
 router.get('/', middleware.isLoggedIn,function(req, res) {
 	if(res.locals.is_desktop){
 		let initialDate = moment().startOf('month').toDate();
-		console.log(initialDate);
 		let finalDate = moment().endOf('month').toDate();
 		MonthConfig.find({isDefined: true, dateSetup: { $gte: initialDate, $lte: finalDate }})
 		.exec(function(err, monthConfig){
