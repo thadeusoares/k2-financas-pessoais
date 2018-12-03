@@ -32,5 +32,14 @@
     k2App.showNotification('top','right','success','<%=success %>')
     });
     </script>
+     <% } %>
+    <% if(info && info.length > 0) { %>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      <% info.forEach( function(inf) { %>
+        k2App.showNotification('top','right','warning','<%=inf %>')
+      <% }); %>
+    });
+    </script>
     <% } %>
 
