@@ -28,6 +28,7 @@ router.use(function(req, res, next){
 router.get('/', middleware.isLoggedIn,function(req, res) {
 	if(res.locals.is_desktop){
 		let initialDate = moment().startOf('month').toDate();
+		console.log(initialDate);
 		let finalDate = moment().endOf('month').toDate();
 		MonthConfig.find({isDefined: true, dateSetup: { $gte: initialDate, $lte: finalDate }})
 		.exec(function(err, monthConfig){
@@ -37,14 +38,23 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 				res.render("home/erro",{ error: err});
 			}else{
 				//Recupera todos os subgrupos
-			    Subgroup.find({
-				    'owner.username': req.user.username,
-				     subgroupOf: null,
-				     isActive: true,
-				     isFavorite: true,
-				     'goals.date': { $eq: initialDate },
-				     goals: { $elemMatch: { date: { $eq: initialDate} } } })
-				.populate({ path: 'subgroupsInside', select: '_id' })
+			    Subgroup.aggregate([{ 
+			    	$match: {
+			    		'owner.username': req.user.username,
+			    		subgroupOf: null,isActive: true,isFavorite: true,
+			    		'goals.date': { $eq:  initialDate }}
+		    	},{	$project: {
+		    			description: 1,
+			    		subgroupsInside: 1,
+			    		goals: {
+			    			$filter: {
+				    			input: '$goals',
+				    			as: 'item',
+				    			cond: {$eq: ['$$item.date', initialDate]}
+			    			}
+			    		}
+    				}
+    			}])
 				.sort({description: 'asc'})
 			    .exec(function(err, subgroups){
 			    	if(err){
