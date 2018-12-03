@@ -89,9 +89,9 @@ router.put("/:month/:year/edit", middleware.isLoggedIn, function(req, res){
 	async.series([
 		function(done){
 			async.each(req.body.subgroup, function(goalForm, callback){
-				console.log("#######################");
+				/*console.log("#######################");
 				console.log("ID: "+ goalForm.subgroupId);
-				console.log("Valor: "+ numeral(goalForm.valueOfGoal).value());
+				console.log("Valor: "+ numeral(goalForm.valueOfGoal).value());*/
 				//PRECISO ENCONTRAR SOMENTE UM REGISTRO DE GOALS e removê-lo
 				Subgroup.findOne({"owner.username": req.user.username, _id:mongoose.Types.ObjectId(goalForm.subgroupId)}).
 				exec(function(err, subgroup){

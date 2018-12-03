@@ -170,19 +170,21 @@ router.get('/:year/:month/json', middleware.isLoggedIn, function(req, res) {
     });
 });
 
-router.get('/:year/:month/agg/json', middleware.isLoggedIn, function(req, res) {
+router.get('/:year/:month/agg/json'/*, middleware.isLoggedIn*/, function(req, res) {
 
 	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
 	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
 
 	res.setHeader('Content-Type', 'application/json');
-    Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
+    Entry.find({"owner.username": "thadeu.soares@gmail.com", createdIn: { $gte: initialDate, $lte: finalDate } })
     .exec(function(err, entriesList){
-    	Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true}, 
+    	Subgroup.find({"owner.username": "thadeu.soares@gmail.com", subgroupOf: null, isActive: true}, 
 			function(errSubgroup, subgroups){
 				if(err){
 					req.flash("error", err.message);
-				}else{
+				}else if(entriesList.length === 0){
+					aggregations = [];
+				} else {
 					aggregations = entryGroups.aggregations(subgroups, entriesList, initialDate);
 					//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
 					aggregations.fixa.percentualAmount = numeral(aggregations.fixa.percentual()).multiply(100)._value;
