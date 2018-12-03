@@ -90,7 +90,11 @@
               </tr>
   					</thead>
             <tbody>
-              <% subgroups.forEach(function(subgroup, idx){ %>
+              <% subgroups.forEach(function(subgroup, idx){ 
+                let metaAtual = subgroup.goals.length>0?subgroup.goals.filter(goal => moment(goal.date).isSame(monthConfig.dateSetup) && goal.valueOfGoal).shift():undefined;
+
+
+              %>
               <tr>
                 <td>
                   <% if(subgroup.group === "fixa") { %>
@@ -118,7 +122,7 @@
                       name="subgroup[<%=idx%>][valueOfGoal]" 
                       id="txtSaldoCartaoInicio" 
                       placeholder="#0,00" 
-                      value="<%=subgroup.goals.length>0?numeral(subgroup.goals.filter(goal => moment(goal.date).isSame(monthConfig.dateSetup) && goal.valueOfGoal)[0].valueOfGoal).format("0,0.00"):"" %>">                    
+                      value="<%=metaAtual!==undefined?numeral(metaAtual.valueOfGoal).format("0,0.00"):"" %>">                    
                   </div>
                 </td>
                 <td class="td-actions text-center">
