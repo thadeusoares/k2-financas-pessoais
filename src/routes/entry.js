@@ -81,18 +81,21 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 			let initialEntryDate = moment('01-01-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
 
 			Entry.aggregate([{
-		    	$match: { createdIn: { $gte: initialDate } }
+		    	$match: { createdIn: { $gte: initialEntryDate } }
 				},{
 		    	$group: { _id: {$dateToString: { format: "%m", date: "$createdIn"}} }
 			}]).exec(function(err, meses){
-				let ultimoMes = meses.map( no => no._id).slice(-1);
+				//NÃO ESTÁ PEGANDO O MAIOR MÊS E SIM QUALQUER UM....
+				let ultimoMes = Math.max.apply(Math, meses.map( no => no._id));
+				console.log("Ultimo mes");
+				console.log(meses);
 				if(err){
 					req.flash("error", err.message);
 				}else if(monthConfig.length === 0){
 					let aggregations = {
 						fixa: {
 							amountRealized: 0,
-							valueOfGoal: 0,
+							valeuOfGoal: 0,
 							percentual: function(){}
 						},
 						variavel: {
@@ -116,7 +119,11 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 						}
 						//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
 						if(res.locals.is_desktop){
-							res.render("entries",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes)});						
+							res.render("entries",{
+								entries: entriesList, 
+								aggregations:aggregations, 
+								menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes)
+							});						
 						}else{
 							res.render("entries/mobile",{entries: entriesList, aggregations:aggregations, menuEntries: menuEntries(req.params.year,req.params.month,ultimoMes)});						
 						}
