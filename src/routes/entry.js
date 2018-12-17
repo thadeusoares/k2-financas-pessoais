@@ -192,7 +192,7 @@ router.get('/:year/:month/agg/json', middleware.isLoggedIn, function(req, res) {
 				} else {
 					aggregations = entryGroups.aggregations(subgroups, entriesList, initialDate);
 					//REALIZA A SOMA E MOSTRA O VALOR PREVISTO PARA CADA TIPO DE DESPESA
-					aggregations.fixa.percentualAmount = numeral(aggregations.fixa.percentual()).multiply(100)._value;
+					aggregations.fixa.percentualAmount = numeral(aggregations.fixa.percentual() || 1).multiply(100)._value;
 					aggregations.fixa.percentualGoal = numeral(1).subtract(aggregations.fixa.percentual()).multiply(100)._value;
 					aggregations.variavel.percentualAmount = aggregations.variavel.percentual();
 					aggregations.variavel.percentualGoal = aggregations.variavel.percentual();
