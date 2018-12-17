@@ -163,24 +163,24 @@ function changeTypeOfGroup(){
    }
 }
 
-$("#formInsert input[name='typeofGroup']").change(changeTypeOfGroup);
-$("#formUpdate input[name='typeofGroup']").change(changeTypeOfGroup);
+$(document).ready(function() {
+  $("#formInsert input[name='typeofGroup']").change(changeTypeOfGroup);
+  $("#formUpdate input[name='typeofGroup']").change(changeTypeOfGroup);
 
-//$(".groupType").change(function(){  
-$(".subgroup-group").change(function(){  
+  //$(".groupType").change(function(){  
+  $(".subgroup-group").change(function(){  
    k2App.fillParentGroupList($(this).val(), $(this).parents('form')); 
-});
+  });
 
-$(".btn-edit-subgroup").on("click", function(){
+  $(".btn-edit-subgroup").on("click", function(){
   let idSubGroup = $(this).val().trim();
   k2App.fillEditSubgroupForm(idSubGroup);
-});
+  });
 
-//###########################
-// Entries
-//###########################
+  //###########################
+  // Entries
+  //###########################
 
-$(document).ready(function() {
   $('.setup-month-icon').on('click', function () {
     $("#setupMonth").collapse('show');
     $(this).hide(200);

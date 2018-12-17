@@ -63,12 +63,14 @@
                           <option value="<%=pfCode%>"><%=paymentMethod[pfCode]%></option>
                           <% }); %>
                         </optgroup>
+                        <% /*
                         <optgroup label="Pessoa Jurídica">
-                          <%Object.keys(paymentMethod).filter(key => paymentMethod[key].indexOf("PJ") === 0)
-                            .forEach(function(pfCode){ %>
-                          <option value="<%=pfCode%>"><%=paymentMethod[pfCode]%></option>
-                          <% }); %>
+                          < %Object.keys(paymentMethod).filter(key => paymentMethod[key].indexOf("PJ") === 0)
+                            .forEach(function(pfCode){ % >
+                          <option value="< %=pfCode% >">< %=paymentMethod[pfCode]% ></option>
+                          < % }); % >
                         </optgroup>
+                         */ %>
                       </select>
                     </div>
                   </div>

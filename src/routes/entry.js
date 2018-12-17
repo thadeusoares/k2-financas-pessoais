@@ -87,8 +87,8 @@ router.get('/:year/:month', middleware.isLoggedIn,function(req, res) {
 			}]).exec(function(err, meses){
 				//NÃO ESTÁ PEGANDO O MAIOR MÊS E SIM QUALQUER UM....
 				let ultimoMes = Math.max.apply(Math, meses.map( no => no._id));
-				console.log("Ultimo mes");
-				console.log(meses);
+				/*console.log("Ultimo mes");
+				console.log(meses);*/
 				if(err){
 					req.flash("error", err.message);
 				}else if(monthConfig.length === 0){
@@ -170,22 +170,20 @@ router.get('/:year/:month/json', middleware.isLoggedIn, function(req, res) {
 	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
 	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
 
-	res.setHeader('Content-Type', 'application/json');
     Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
     .exec(function(err, entriesList){
-            res.send(JSON.stringify(entriesList));
+            res.status(200).json(entriesList);
     });
 });
 
-router.get('/:year/:month/agg/json'/*, middleware.isLoggedIn*/, function(req, res) {
+router.get('/:year/:month/agg/json', middleware.isLoggedIn, function(req, res) {
 
 	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
 	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
 
-	res.setHeader('Content-Type', 'application/json');
-    Entry.find({"owner.username": "thadeu.soares@gmail.com", createdIn: { $gte: initialDate, $lte: finalDate } })
+    Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
     .exec(function(err, entriesList){
-    	Subgroup.find({"owner.username": "thadeu.soares@gmail.com", subgroupOf: null, isActive: true}, 
+    	Subgroup.find({"owner.username": req.user.username, subgroupOf: null, isActive: true}, 
 			function(errSubgroup, subgroups){
 				if(err){
 					req.flash("error", err.message);
@@ -199,11 +197,32 @@ router.get('/:year/:month/agg/json'/*, middleware.isLoggedIn*/, function(req, re
 					aggregations.variavel.percentualAmount = aggregations.variavel.percentual();
 					aggregations.variavel.percentualGoal = aggregations.variavel.percentual();
 				}
-				res.send(JSON.stringify(aggregations));
+				res.status(200).json(aggregations);
 			});
     });
 });
+/*
+router.get('/:year/:month/balance/json', middleware.isLoggedIn, function(req, res) {
 
+	let initialDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').startOf('month').toDate();
+	let finalDate = moment('01-'+req.params.month+'-'+req.params.year,'DD-MM-YYYY').endOf('month').toDate();
+	MonthConfig.findOne({"owner.username": req.user.username,dateSetup: { $gte: initialDate, $lte: finalDate }}).
+	exec((err, monthConfig) => {
+		Entry.find({"owner.username": req.user.username, createdIn: { $gte: initialDate, $lte: finalDate } })
+	    .exec(function(err, entriesList){
+			if(err){
+				req.flash("error", err.message);
+			}else if(entriesList.length === 0){
+				aggregations = [];
+			} else {
+				console.log(monthConfig);
+				aggregations = entryGroups.balance(entriesList,monthConfig);
+			}
+			res.status(200).json(aggregations);
+	    });
+	});
+});
+*/
 router.delete("/:entry_id", middleware.checkOwnership, function(req, res) {
 	Entry.findByIdAndRemove(req.params.entry_id, function(err){
        if(err) {

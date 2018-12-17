@@ -6,10 +6,11 @@ const PaymentMethods = Object.freeze({
   pf02: "PF/Dinheiro",
   pf03: "PF/Crédito",
   //Pessoa Jurídica
+  /*
   pj01: "PJ/Débito",
   pj02: "PJ/Dinheiro",
   pj03: "PJ/Crédito",
-  pj04: "PJ/Financiamento",
+  pj04: "PJ/Financiamento",*/
 });
 
 const EntrySchema = new mongoose.Schema({

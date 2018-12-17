@@ -1,7 +1,7 @@
 var moment 		= require('moment'),
 	numeral 	= require('numeral'),
-	ptBr 		= require('numeral/locales/pt-br.js');
-
+	ptBr 		= require('numeral/locales/pt-br.js'),
+	{PaymentMethods} = require('../models/entry');
 	moment.locale('pt-br');
 	numeral.locale('pt-br');
 
@@ -67,5 +67,43 @@ module.exports = {
 		}
 		aggregation.valueOfGoal += subgroup.goals.reduce( (soma, goal) => soma + goal.valueOfGoal, 0);
 		return aggregation;
+    },
+
+    //Retorna saldos de um mês
+    /*
+
+const PaymentMethods = Object.freeze({
+  //Pessoa Física
+  pf01: "PF/Débito",
+  pf02: "PF/Dinheiro",
+  pf03: "PF/Crédito",
+  //Pessoa Jurídica
+  pj01: "PJ/Débito",
+  pj02: "PJ/Dinheiro",
+  pj03: "PJ/Crédito",
+  pj04: "PJ/Financiamento",
+});
+
+    */
+    balance: function(entriesList, monthConfig){
+    	let retorno = {
+    		creditCard: 0,
+    		account: 0
+    	}
+		
+    	if(typeof entriesList !== undefined && (entriesList !== null && entriesList.length > 0)){
+    		//CONSIDERA SÓ O CARTÃO!
+			retorno.creditCard = numeral(monthConfig.balanceCreditCard).subtract(entriesList
+				.filter(entry => entry.paymentMethod === PaymentMethods.pf03)
+				.reduce((prev, entry) => prev + entry.valueOf, 0))._value;
+
+
+
+			//CONSIDERA DEBITO E DINHEIRO
+			retorno.account = numeral(monthConfig.balanceAccountBank).subtract(entriesList
+				.filter(entry => entry.paymentMethod === PaymentMethods.pf01 || entry.paymentMethod === PaymentMethods.pf02)
+				.reduce((prev, entry) => prev + entry.valueOf, 0))._value;
+		}
+    	return retorno;
     }
 }
