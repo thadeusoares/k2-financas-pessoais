@@ -53,11 +53,11 @@
                 <i class="material-icons">credit_card</i>
               </div>
               <p class="card-category">Saldo Cartão de Crédito</p>
-              <h3 class="card-title">$34,245</h3>
+              <h3 class="card-title"><%=numeral(balance.creditCard).format("$ 0,0.00")%></h3>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">date_range</i> referente ao mês de Novembro
+                <i class="material-icons">date_range</i> referente ao mês de <%=moment(this.dateSetup).format('MMMM/YYYY')%>
               </div>
             </div>
           </div>
@@ -69,11 +69,11 @@
                 <i class="material-icons">account_balance</i>
               </div>
               <p class="card-category">Saldo Conta Bancária</p>
-              <h3 class="card-title">$34,245</h3>
+              <h3 class="card-title"><%=numeral(balance.account).format("$ 0,0.00")%></h3>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">date_range</i> referente ao mês de Novembro
+                <i class="material-icons">date_range</i> referente ao mês de <%=moment(this.dateSetup).format('MMMM/YYYY')%>
               </div>
             </div>
           </div>

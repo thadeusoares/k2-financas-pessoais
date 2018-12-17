@@ -18,12 +18,12 @@ let express 	= require("express"),
 //=============================
 
 //SHOW MonthConfig JSON
-router.get('/:month_id/json', middleware.checkOwnership, function(req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    MonthConfig.findById(req.params.month_id).exec(function(err, groupsList){
-            res.send(JSON.stringify(groupsList));
-    });
-});
+router.get('/:month_id/json', middleware.checkOwnership, (req, res) => 
+	MonthConfig
+	.findById(req.params.month_id)
+	.exec((err, groupsList) => res.status(200).json(groupsList))
+);
+
 
 //Make update in Month-config
 router.put("/:month_id/edit", middleware.checkOwnership, function(req, res){

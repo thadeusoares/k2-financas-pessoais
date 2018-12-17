@@ -29,7 +29,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 	if(res.locals.is_desktop){
 		let initialDate = moment().startOf('month').toDate();
 		let finalDate = moment().endOf('month').toDate();
-		MonthConfig.find({isDefined: true, dateSetup: { $gte: initialDate, $lte: finalDate }})
+		MonthConfig.findOne({"owner.username": req.user.username, isDefined: true, dateSetup: { $gte: initialDate, $lte: finalDate }})
 		.exec(function(err, monthConfig){
 			if(err){
 				console.log("##########=>ERRO: ");
@@ -76,8 +76,7 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 						});
 						Entry.find({
 					   		"owner.username": req.user.username,
-					   		createdIn: { $gte: initialDate, $lte: finalDate },
-					   		"subgroup.id": { $in: arrayOfSubgroupsId }
+					   		createdIn: { $gte: initialDate, $lte: finalDate }
 					   	})
 					   	.sort({createdIn: 'desc'})
 						.exec(function(err, entriesList){
@@ -99,7 +98,11 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 									subgroup.aggregationOfEntries = entryGroups.aggregationBySubgroupOwner(subgroup, dados, initialDate);
 									subGroupsAgg.push(subgroup);
 								});
-								res.render("home/dashboard",{ ignoreViewRouting: true, subgroups: subGroupsAgg });
+								res.render("home/dashboard",{ 
+									ignoreViewRouting: true, 
+									subgroups: subGroupsAgg, 
+									balance: recuperaSaldo(entriesList, monthConfig) 
+								});
 							}
 				    	});
 			    	}
@@ -110,5 +113,14 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 		res.redirect("/entry");
 	}
 });
+
+let recuperaSaldo = (entriesList, monthConfig) => {
+	if(entriesList.length === 0){
+		aggregations = [];
+	} else {
+		aggregations = entryGroups.balance(entriesList,monthConfig);
+	}
+	return aggregations;
+}
 
 module.exports = router

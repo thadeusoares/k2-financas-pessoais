@@ -65,13 +65,16 @@
                           </option>
                           <% }); %>
                         </optgroup>
+                        <% /*
                         <optgroup label="Pessoa Jurídica">
-                          <%Object.keys(paymentMethod).filter(key => paymentMethod[key].indexOf("PJ") === 0)
-                            .forEach(function(pjCode){ %>
-                          <option value="<%=pjCode%>"  <%=(paymentMethod[pjCode]===entry.paymentMethod)?"selected":""%>>
-                            <%=paymentMethod[pjCode]%>
+                          < %Object.keys(paymentMethod).filter(key => paymentMethod[key].indexOf("PJ") === 0)
+                            .forEach(function(pjCode){ % >
+                          <option value=" < % = pjCode % >"  < % = (paymentMethod[pjCode]===entry.paymentMethod)?"selected":"" % > >
+                            < %=paymentMethod[pjCode]% >
                           </option>
-                          <% }); %>
+                          < % }); % >
+                         */
+                         %>
                         </optgroup>
                       </select>
                     </div>
