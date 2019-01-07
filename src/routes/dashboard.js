@@ -58,12 +58,12 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 			    .exec(function(err, subgroups){
 			    	if(err){
 			    		res.render("home/erro",{ error: err });
-			    	} else if (monthConfig.length === 0 || subgroups.length === 0){
+			    	} else if (monthConfig === undefined || subgroups.length === 0){
 			    		let info = [];
-			    		if ( monthConfig.length === 0) info.push("Favor informar os saldos deste mês");
+			    		if ( monthConfig === undefined) info.push("Favor informar os saldos deste mês");
 			    		if ( subgroups.length === 0 ) info.push("Não existem metas associadas aos favoritos para este mês");
 
-			    		res.render("home/dashboard",{ info: info,ignoreViewRouting: true, subgroups: []});
+			    		res.render("home/dashboard",{ info: info,ignoreViewRouting: true, subgroups: [], balance: {creditCard: 0,account: 0}});
 			    	} else {
 				    	//Recupera todas as Entries que foram criadas no mês vigente
 				    	//Filtra somente aquelas referentes aos ids dos grupos ou seus filhos
@@ -116,7 +116,10 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 
 let recuperaSaldo = (entriesList, monthConfig) => {
 	if(entriesList.length === 0){
-		aggregations = [];
+		aggregations = {
+    		creditCard: monthConfig.balanceCreditCard || 0,
+    		account: monthConfig.balanceAccountBank || 0
+    	}
 	} else {
 		aggregations = entryGroups.balance(entriesList,monthConfig);
 	}
