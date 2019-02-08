@@ -289,8 +289,10 @@ $(document).ready(function() {
 
   $(window).keydown(function(event){
     if( (event.keyCode == 13) /*&& (validationFunction() == false)*/ ) {
-      event.preventDefault();
-      return false;
+      if(!$(event.target).hasClass('password-login')){
+        event.preventDefault();
+        return false;
+      }
     }
   });
 });

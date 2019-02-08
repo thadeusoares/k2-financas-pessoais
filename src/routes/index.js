@@ -34,13 +34,30 @@ router.post("/register", function(req, res){
     });
 });
 
-router.get("/changePassword", function(req, res){
+router.get("/changePassword", middleware.isLoggedIn, function(req, res){
   User.findById(req.user._id, function(err, user){
     res.render("registries/edit", {user: user});
   });
 });
 
-router.put("/changePassword", function(req, res){
+router.put("/changePassword", middleware.isLoggedIn, function(req, res){
+  console.log("Nova senha: "+req.body.password);
+  User.findById(req.user._id, function(err, user){
+    if(err){
+        console.log(err);
+        req.flash("error", err.message);
+        return res.render("registries/edit", {user: user});
+    }
+    user.changePassword(req.body.oldPassword, req.body.newPassword, function(err, pwd){
+      if(err){
+        req.flash("error", err.message);
+      }else{
+        user.save();
+        req.flash("success", "Senha alterada com sucesso!");
+      } 
+      res.redirect("/dashboard"); 
+    });
+  });
 });
 
 //show login form

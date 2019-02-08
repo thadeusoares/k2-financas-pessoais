@@ -1,23 +1,31 @@
-<%=user%>
-
-<div class="container">
-    <div class="row">
-        <h1 style="text-align: center">Criar um novo usuário</h1>
-        <div style="width: 30%; margin: 25px auto;">
-            <form action="/register" method="post">
-                <div class="form-group">
-                    <input class="form-control" type="email" name="username" placeholder="username">
-                </div>               
-                <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="password">
+<% include ../partials/header %>
+<div class="content">
+    <div class="container-fluid">
+        <div class="col-lg-9 col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Mude sua senha <%=user.username%></h4>
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-lg btn-primary btn-block">Sign Up!</button>
+                <div class="card-body">
+                    <div class="form-group">
+                    <form action="/changePassword?_method=PUT" method="POST">
+                        <inpyt type="hidden" name="username" value="<%=user.username%>">
+                        <div class="row" style="width: 30%; margin: 25px auto;">
+                            Senha atual
+                                    <input class="form-control" type="password" name="oldPassword" placeholder="password">
+                        </div>
+                        <div class="row"  style="width: 30%; margin: 25px auto;">
+                            Nova senha
+                                    <input class="form-control" type="password" name="newPassword" placeholder="password">
+                        </div>
+                        <div  class="row" style="width: 30%; margin: 25px auto;">
+                            <button class="btn btn-lg btn-primary btn-block">Alterar Senha</button>
+                        </div>
+                    </form>
+                    </div>                    
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
-
-    
-
+<% include ../partials/footer %>      
