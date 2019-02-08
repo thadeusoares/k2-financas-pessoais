@@ -34,6 +34,15 @@ router.post("/register", function(req, res){
     });
 });
 
+router.get("/changePassword", function(req, res){
+  User.findById(req.user._id, function(err, user){
+    res.render("registries/edit", {user: user});
+  });
+});
+
+router.put("/changePassword", function(req, res){
+});
+
 //show login form
 router.get("/login", function(req, res){
    res.render("index", {ignoreViewRouting: true}); 

@@ -25,7 +25,7 @@ router.use(function(req, res, next){
 
 // LIST
 router.get('/', middleware.isLoggedIn,function(req, res) {
-	let initialDate = moment().startOf('month').toDate();//moment.parse(moment.format(new Date(), '01-MM-YYYY'),'DD-MM-YYYY');
+	let initialDate = moment().startOf('month').toDate();
 
 	MonthConfig.findOne({"owner.username": req.user.username, dateSetup: { $eq: initialDate }})
         .sort({description: 'asc'})
