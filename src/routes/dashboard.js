@@ -58,9 +58,9 @@ router.get('/', middleware.isLoggedIn,function(req, res) {
 			    .exec(function(err, subgroups){
 			    	if(err){
 			    		res.render("home/erro",{ error: err });
-			    	} else if (monthConfig === undefined || subgroups.length === 0){
+			    	} else if (monthConfig === null || subgroups.length === 0){
 			    		let info = [];
-			    		if ( monthConfig === undefined) info.push("Favor informar os saldos deste mês");
+			    		if ( monthConfig === null) info.push("Favor informar os saldos deste mês");
 			    		if ( subgroups.length === 0 ) info.push("Não existem metas associadas aos favoritos para este mês");
 
 			    		res.render("home/dashboard",{ info: info,ignoreViewRouting: true, subgroups: [], balance: {creditCard: 0,account: 0}});

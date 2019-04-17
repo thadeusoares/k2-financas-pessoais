@@ -3,6 +3,7 @@
   <div class="container-fluid">
   	 <!-- START MONTH CONFIG -->
 	<div class="row">
+    <div class="col-md-12">
 		<div class="card">
 		<form action="/month-config/<%=monthConfig._id%>/edit?_method=PUT" method="POST" id="formUpdate">
           <div class="card-header card-header-info card-header-success">
@@ -66,10 +67,13 @@
           </div>
           </form>
         </div>
+    </div>
 	</div>
 	<!-- END MONTH CONFIG -->
 	<!-- START SUBGROUPS LIST -->
 	<div class="row">
+    <div class="col-md-12">
+
 		<div class="card">
 			<div class="card-header card-header-icon card-header-success">
         <div class="card-icon">
@@ -147,7 +151,8 @@
       </div>
       </form>
 		</div>
-	</div>
+	 </div>
+  </div>
 	<!-- END OF SUBGROUPS LIST -->
 
   </div>
