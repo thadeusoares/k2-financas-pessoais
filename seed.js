@@ -17,29 +17,89 @@ let date1 = moment().startOf('month').toDate();//moment.parse(moment(now, '01-MM
 let date2 = moment().startOf('month').add(-1,'M').toDate();
 
 var subgroups = [
+
 { group: 'fixa', description: "Moradia", isFavorite: true,
     goals:[{
         date: date1,
         valueOfGoal: 1000.50
    }] 
 },
-{ group: 'fixa', description: "Cuidados Pessoais" },
-{ group: 'fixa', description: "Empréstimo"},
-{ group: 'variavel', description: "Lazer" },
-{ group: 'variavel', description: "Almoço" },
+{ group: 'fixa', description: "Filhos"},
+{ group: 'fixa', description: "Karina"},
+{ group: 'fixa', description: "Serviços Domésticos"},
+{ group: 'fixa', description: "Empresa"},
+{ group: 'fixa', description: "Tel/Internet"},
+{ group: 'fixa', description: "Veículo"},
+{ group: 'fixa', description: "Seguro Pessoal"},
+
+{ group: 'variavel', description: "Alimentação" },
+{ group: 'variavel', description: "Cuidados pessoais" },
 { group: 'variavel', description: "Lanche" },
 { group: 'variavel', description: "Transporte"},
 { group: 'variavel', description: "Veículo" },
 ]
 
-var subgruposEmprestimo = [
-{ group: 'fixa',    description: "FCO" /*,    subgroupOf: subgroupSaved._id */},
-{ group: 'fixa',    description: "Previ"/*,    subgroupOf: subgroupSaved._id */},
-{ group: 'fixa',    description: "Cooperforte"/*,    subgroupOf: subgroupSaved._id */ },
+
+let subgruposMoradia = [
+{ group: 'fixa',    description: "Água" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Aluguel" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Condomínio" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "IPTU", isSazonal:true /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Luz" /*,    subgroupOf: subgroupSaved._id */},
+];
+
+let subgruposTelInternet = [
+{ group: 'fixa',    description: "NET" /*,    subgroupOf: subgroupSaved._id */},
+];
+
+let subgruposFilhos = [
+{ group: 'fixa',    description: "Colégio Gianna" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Colégio Teresa" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Inglês" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Piano" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Violino" /*,    subgroupOf: subgroupSaved._id */},
 ];
 
 
-var monthsConfig = [
+let subgruposKarina = [
+{ group: 'fixa',    description: "1/3 Férias", isSazonal:true /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "13o Terceiro", isSazonal:true /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Férias", isSazonal:true /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Salário Líquido" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Vale Transporte" /*,    subgroupOf: subgroupSaved._id */},
+
+];
+
+let subgruposDomesticos = [
+{ group: 'fixa',    description: "Diarista" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "iDomestica" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "13o Terceiro" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "SIMPLES" /*,    subgroupOf: subgroupSaved._id */},
+];
+
+let subgruposEmpresa = [
+{ group: 'fixa',    description: "Contador" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Impostos" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Pró-labore" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Tarifas Bancárias" /*,    subgroupOf: subgroupSaved._id */},
+];
+
+let subgruposVeiculoFixo = [
+{ group: 'fixa',    description: "IPVA" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Licenciamento" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Seguro" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Seguro Obrigatório" /*,    subgroupOf: subgroupSaved._id */},
+];
+
+let subgruposSeguro = [
+{ group: 'fixa',    description: "Vida Mannu" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Vida Thadeu" /*,    subgroupOf: subgroupSaved._id */},
+
+];
+
+
+
+let monthsConfig = [
 { balanceAccountBank: 0.0, balanceCreditCard: 0.0, dateSetup: date1 },
 { balanceAccountBank: 1.1, balanceCreditCard: 2.2, dateSetup: date2 }
 
@@ -111,8 +171,8 @@ function step1(){
 //SEGUNDO
 
 function step2(){
-    subgruposEmprestimo.forEach(function(subgrupo){
-        Subgroup.findOne({description: "Empréstimo"}, function(err, foundSubgroup){
+    subgruposMoradia.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Moradia"}, function(err, foundSubgroup){
             //console.log("======>"+foundSubgroup);
             subgrupo.subgroupOf = foundSubgroup._id;
             Subgroup.create(subgrupo, function(err, subgrupoSalvo){
@@ -122,6 +182,85 @@ function step2(){
             });
         });
     });
+    subgruposTelInternet.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Tel/Internet"}, function(err, foundSubgroup){
+            //console.log("======>"+foundSubgroup);
+            subgrupo.subgroupOf = foundSubgroup._id;
+            Subgroup.create(subgrupo, function(err, subgrupoSalvo){
+                foundSubgroup.subgroupsInside.push(subgrupoSalvo)
+                foundSubgroup.save();
+                console.log("Created new subgroup inside subgroup");
+            });
+        });
+    });
+    subgruposFilhos.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Filhos"}, function(err, foundSubgroup){
+            //console.log("======>"+foundSubgroup);
+            subgrupo.subgroupOf = foundSubgroup._id;
+            Subgroup.create(subgrupo, function(err, subgrupoSalvo){
+                foundSubgroup.subgroupsInside.push(subgrupoSalvo)
+                foundSubgroup.save();
+                console.log("Created new subgroup inside subgroup");
+            });
+        });
+    });
+    subgruposKarina.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Karina"}, function(err, foundSubgroup){
+            //console.log("======>"+foundSubgroup);
+            subgrupo.subgroupOf = foundSubgroup._id;
+            Subgroup.create(subgrupo, function(err, subgrupoSalvo){
+                foundSubgroup.subgroupsInside.push(subgrupoSalvo)
+                foundSubgroup.save();
+                console.log("Created new subgroup inside subgroup");
+            });
+        });
+    });
+    subgruposDomesticos.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Serviços Domésticos"}, function(err, foundSubgroup){
+            //console.log("======>"+foundSubgroup);
+            subgrupo.subgroupOf = foundSubgroup._id;
+            Subgroup.create(subgrupo, function(err, subgrupoSalvo){
+                foundSubgroup.subgroupsInside.push(subgrupoSalvo)
+                foundSubgroup.save();
+                console.log("Created new subgroup inside subgroup");
+            });
+        });
+    });
+    subgruposEmpresa.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Empresa"}, function(err, foundSubgroup){
+            //console.log("======>"+foundSubgroup);
+            subgrupo.subgroupOf = foundSubgroup._id;
+            Subgroup.create(subgrupo, function(err, subgrupoSalvo){
+                foundSubgroup.subgroupsInside.push(subgrupoSalvo)
+                foundSubgroup.save();
+                console.log("Created new subgroup inside subgroup");
+            });
+        });
+    });
+    subgruposVeiculoFixo.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Veículo", group: 'fixa'}, function(err, foundSubgroup){
+            //console.log("======>"+foundSubgroup);
+            subgrupo.subgroupOf = foundSubgroup._id;
+            Subgroup.create(subgrupo, function(err, subgrupoSalvo){
+                foundSubgroup.subgroupsInside.push(subgrupoSalvo)
+                foundSubgroup.save();
+                console.log("Created new subgroup inside subgroup");
+            });
+        });
+    });
+
+    subgruposSeguro.forEach(function(subgrupo){
+        Subgroup.findOne({description: "Seguro Pessoal"}, function(err, foundSubgroup){
+            //console.log("======>"+foundSubgroup);
+            subgrupo.subgroupOf = foundSubgroup._id;
+            Subgroup.create(subgrupo, function(err, subgrupoSalvo){
+                foundSubgroup.subgroupsInside.push(subgrupoSalvo)
+                foundSubgroup.save();
+                console.log("Created new subgroup inside subgroup");
+            });
+        });
+    });
+
 }
 
 
