@@ -9,7 +9,7 @@ GoalSchema.index({ date: 1 });
 const SubgroupSchema = new mongoose.Schema({
 	group: {
 		type: String,
-		enum: ['fixa', 'variavel']
+		enum: ['fixa', 'variavel', 'parcelada']
 	},
 	subgroupsInside: [
 		{
@@ -26,6 +26,10 @@ const SubgroupSchema = new mongoose.Schema({
 		required: true
 	},
     isFavorite: {
+        type: Boolean,
+        default: false
+    },
+    isSazonal: {
         type: Boolean,
         default: false
     },
