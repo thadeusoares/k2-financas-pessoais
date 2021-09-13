@@ -53,8 +53,8 @@ let subgruposTelInternet = [
 ];
 
 let subgruposFilhos = [
-{ group: 'fixa',    description: "Colégio Gianna" /*,    subgroupOf: subgroupSaved._id */},
-{ group: 'fixa',    description: "Colégio Teresa" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Colégio Filho 1" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Colégio Filho 2" /*,    subgroupOf: subgroupSaved._id */},
 { group: 'fixa',    description: "Inglês" /*,    subgroupOf: subgroupSaved._id */},
 { group: 'fixa',    description: "Piano" /*,    subgroupOf: subgroupSaved._id */},
 { group: 'fixa',    description: "Violino" /*,    subgroupOf: subgroupSaved._id */},
@@ -92,8 +92,8 @@ let subgruposVeiculoFixo = [
 ];
 
 let subgruposSeguro = [
-{ group: 'fixa',    description: "Vida Mannu" /*,    subgroupOf: subgroupSaved._id */},
-{ group: 'fixa',    description: "Vida Thadeu" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Vida 1" /*,    subgroupOf: subgroupSaved._id */},
+{ group: 'fixa',    description: "Vida 2" /*,    subgroupOf: subgroupSaved._id */},
 
 ];
 
@@ -119,7 +119,7 @@ function step1(){
         if(err){
             console.log(err);
         }
-        User.register(new User({username: "thadeu.soares@gmail.com"}), "senha", function(err, user){
+        User.register(new User({username: "welcome@gmail.com"}), "senha", function(err, user){
             if(err){
                 console.log(err);
                 req.flash("error", err.message);
