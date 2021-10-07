@@ -36,6 +36,7 @@ build/Release
 node_modules/
 jspm_packages/
 
+
 # TypeScript v1 declaration files
 typings/
 
@@ -61,6 +62,7 @@ typings/
 .next
 
 #Sass
+public/assets/scss/
 .sass-cache/
 *.css.map
 *.sass.map
